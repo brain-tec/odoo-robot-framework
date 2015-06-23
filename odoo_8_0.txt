@@ -84,10 +84,8 @@ ElementPreCheck    [Arguments]    ${element}
 
 
 ElementPostCheck    [Arguments]    ${element}
-   Wait Until Page Contains Element	xpath=//div[contains(@class,'openerp_webclient_container') and not(contains(@class, 'oe_wait'))]
    # Check that page is not blocked by RPC Call
-#   Sleep        ${OPENERP_RPC_BLOCK_TIME}
-#   Wait Until Keyword Succeeds    3 min   1 sec    Xpath Should Match X Times      //div[contains(@class,'blockPage')]     0
+   Wait Until Page Contains Element	xpath=//div[contains(@class,'openerp_webclient_container') and not(contains(@class, 'oe_wait'))]
 
 
 WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
@@ -103,14 +101,9 @@ Button                      [Arguments]     ${button_name}
 # checked: 8.0 ok
 Many2OneSelect    [Arguments]    ${model}    ${field}    ${value}
      ElementPreCheck	    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-     Log To Console		Many2OneSelect1
      Input Text		    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
-     Log To Console             Many2OneSelect2
-#     Wait Until Page Contains Element    xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
      Click Link             xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
-     Log To Console             Many2OneSelect3
      Textfield Should Contain    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
-     Log To Console             Many2OneSelect4
 
 Date    [Arguments]    ${model}    ${field}    ${value}
      ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
@@ -128,8 +121,11 @@ Float    [Arguments]    ${model}    ${field}    ${value}
 
 Text    [Arguments]    ${model}    ${field}    ${value}
      ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-
      Input Text             xpath=//div[contains(@class,'openerp')][last()]//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+
+Select-Option    [Arguments]    ${model}    ${field}    ${value}    
+     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+     Select From List By Label	xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 
 NotebookPage    [Arguments]    ${model}=None
     Wait For Condition      return true;
