@@ -2,7 +2,7 @@
 
 Documentation  Test of all elements in OpenERP
 Library        DatabaseLibrary
-Resource       odoo_8_0.txt
+Resource       odoo_8_0.robot
 
 *** Test Cases ***
 # make some checks in DB

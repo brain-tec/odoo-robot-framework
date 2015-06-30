@@ -20,9 +20,9 @@ ${SELENIUM DELAY}   0.2
 ${SELENIUM TIMEOUT}   20
 ${BROWSER}      ff
 ${SERVER}       localhost
-${PORT}         9069
+${PORT}         8069
 ${OPENERP URL}      http://${SERVER}:${PORT}
-${OPENERP DB}       Imwinkelried
+${OPENERP DB}       odoo8_selenium
 
 
 *** Keywords ***
