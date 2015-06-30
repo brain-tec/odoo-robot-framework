@@ -124,8 +124,12 @@ Float    [Arguments]    ${model}    ${field}    ${value}
 
 Text    [Arguments]    ${model}    ${field}    ${value}
      ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-
      Input Text             xpath=//div[contains(@class,'openerp')][last()]//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+
+Checkbox    [Arguments]    ${model}    ${field}
+     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
+     Checkbox Should Not Be Selected	xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
+     Click Element          xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
 
 NotebookPage    [Arguments]    ${model}=None
     Wait For Condition      return true;
