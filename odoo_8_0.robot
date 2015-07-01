@@ -15,7 +15,7 @@ ${OPENERP_RPC_BLOCK_TIME}	3.5
 
 
 # Time till the next command is executed
-${SELENIUM DELAY}   0.01
+${SELENIUM DELAY}   0
 
 # How long a "Wait Until ..." command should wait
 ${SELENIUM TIMEOUT}   20
