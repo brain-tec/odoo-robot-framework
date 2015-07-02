@@ -10,11 +10,6 @@ Variables   config_80.py
 
 
 *** Variables ***
-# Time defined in web/static/src/js/chrome.js till 
-# interface gets blocked after a RPC call
-# We wait first the same time (+0.5s) and then till the interface is no longer blocked
-${OPENERP_RPC_BLOCK_TIME}	3.5
-
 
 # Time till the next command is executed
 ${SELENIUM DELAY}   0
@@ -29,7 +24,7 @@ Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    
     Maximize Browser Window
     Go To                               ${ODOO URL}
     Set Selenium Speed                  ${SELENIUM DELAY}
-    Set Selenium Timeout                ${SELENIUM DELAY}
+    Set Selenium Timeout                ${SELENIUM TIMEOUT}
     Set Selenium Implicit Wait          ${SELENIUM TIMEOUT}
     Run Keyword If                      '${db}' != 'None'                   Wait Until Page Contains Element    xpath=//select[@id='db']
     Run Keyword If                      '${db}' != 'None'                   Select From List By Value           xpath=//select[@id='db']    ${db}
@@ -48,7 +43,7 @@ MainMenu    [Arguments]    ${menu}
 # checked: 8.0 ok
 SubMenu    [Arguments]    ${menu}
     Click Link				xpath=//td[contains(@class,'oe_leftbar')]//ul/li/a[@data-menu='${menu}']
-    ElementPostCheck
+    Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_view_manager_body')]
 
 # checked: 8.0 ok
 ChangeView    [Arguments]    ${view}
