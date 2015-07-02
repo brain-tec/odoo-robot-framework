@@ -9,23 +9,15 @@ Library     String
 Variables   config_80.py
 
 
-*** Variables ***
-
-# Time till the next command is executed
-${SELENIUM DELAY}   0
-
-# How long a "Wait Until ..." command should wait
-${SELENIUM TIMEOUT}   20
-
 *** Keywords ***
 # checked: 8.0 ok
 Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
     Open Browser                        ${ODOO URL}  browser=${BROWSER}
     Maximize Browser Window
     Go To                               ${ODOO URL}
-    Set Selenium Speed                  ${SELENIUM DELAY}
-    Set Selenium Timeout                ${SELENIUM TIMEOUT}
-    Set Selenium Implicit Wait          ${SELENIUM TIMEOUT}
+    Set Selenium Speed                  ${SELENIUM_DELAY}
+    Set Selenium Timeout                ${SELENIUM_TIMEOUT}
+    Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
     Run Keyword If                      '${db}' != 'None'                   Wait Until Page Contains Element    xpath=//select[@id='db']
     Run Keyword If                      '${db}' != 'None'                   Select From List By Value           xpath=//select[@id='db']    ${db}
     Wait Until Page Contains Element    name=login
@@ -151,6 +143,11 @@ SelectListView  [Arguments]    ${model}    @{fields}
     ${xpath}=   Get Substring    ${xpath}    5
     ${xpath}=    Catenate    (//table[contains(@class,'oe_list_content')]//tr[${xpath}]/td)[1]
     Click Element    xpath=${xpath}
+    ElementPostCheck
+
+SidebarAction  [Arguments]    ${type}    ${id}
+    ClickElement   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//div[contains(@class,'oe_form_dropdown_section') and descendant::a[@data-bt-type='${type}' and @data-bt-id='${id}']]/button[contains(@class,'oe_dropdown_toggle')]
+    ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
     ElementPostCheck
 
 MainWindowButton            [Arguments]     ${button_text}
