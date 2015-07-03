@@ -65,7 +65,7 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 
 # checked: 8.0 ok
 Button                      [Arguments]     ${model}    ${button_name}
-     Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+     Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-name='${button_name}']
      Wait For Condition     return true;    20.0
      ElementPostCheck
 
@@ -117,6 +117,45 @@ NewOne2Many    [Arguments]    ${model}    ${field}
     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_form_field_one2many')]/div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//tr/td[contains(@class,'oe_form_field_one2many_list_row_add')]/a
     Click Link             xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_form_field_one2many')]/div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//tr/td[contains(@class,'oe_form_field_one2many_list_row_add')]/a
     ElementPostCheck
+
+One2ManySelectRecord  [Arguments]    ${model}    ${field}    ${submodel}    @{fields}
+    ElementPreCheck    xpath=//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+
+    # Initialize variable
+    ${pre_check_xpath}=    Set Variable
+    ${post_check_xpath}=    Set Variable
+    ${pre_click_xpath}=    Set Variable
+    ${post_click_xpath}=    Set Variable
+    ${pre_check_xpath}=    Catenate    (//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[descendant::td[
+    ${post_check_xpath}=    Catenate    ]])[1]
+    ${pre_click_xpath}=    Catenate    (//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[
+    ${post_click_xpath}=    Catenate    ]/td)[1]
+    ${xpath}=    Set Variable
+
+    # Got throught all field=value and to select the correct record
+    : FOR    ${field}    IN  @{fields}
+    # Split the string in fieldname=fieldvalue
+    \    ${fieldname}    ${fieldvalue}=    Split String    ${field}    separator==    max_split=1
+    \    ${fieldxpath}=    Catenate    @data-bt-testing-model_name='${submodel}' and @data-field='${fieldname}'
+
+         # We first check if this field is in the view and visible
+         # otherwise a single field can break the whole command
+
+    \    ${checkxpath}=     Catenate    ${pre_check_xpath} ${fieldxpath} ${post_check_xpath}
+    \    Log To Console    ${checkxpath}
+    \    ${status}    ${value}=    Run Keyword And Ignore Error    Page Should Contain Element    xpath=${checkxpath}
+
+         # In case the field is not there, log a error
+    \    Run Keyword Unless     '${status}' == 'PASS'    Log    Field ${fieldname} not in the view or unvisible
+         # In case the field is there, add the path to the xpath
+    \    ${xpath}=    Set Variable If    '${status}' == 'PASS'    ${xpath} and descendant::td[${fieldxpath} and string()='${fieldvalue}']    ${xpath}
+
+    # remove first " and " again (5 characters)
+    ${xpath}=   Get Substring    ${xpath}    5
+    ${xpath}=    Catenate    ${pre_click_xpath}    ${xpath}    ${post_click_xpath}
+    Click Element    xpath=${xpath}
+    ElementPostCheck
+
 
 SelectListView  [Arguments]    ${model}    @{fields}
     # Initialize variable
