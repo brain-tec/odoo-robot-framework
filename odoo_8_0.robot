@@ -48,16 +48,13 @@ ChangeView    [Arguments]    ${view}
 
 # Checks that are done always before a element is executed
 ElementPreCheck    [Arguments]    ${element}
-	Execute Javascript      console.log("${element}");
-	# Element may be in a tab. So click the parent tab. If there is no parent tab, forget about the result
-    Execute Javascript      var path="${element}".replace('xpath=','');var id=document.evaluate("("+path+")/ancestor::div[contains(@class,'oe_notebook_page')]/@id",document,null,XPathResult.STRING_TYPE,null).stringValue; if(id != ''){ window.location = "#"+id; $("a[href='#"+id+"']").click(); console.log("Clicked at #" + id); } return true;
+   #  Element may be in a tab. So click the parent tab. If there is no parent tab, forget about the result
+   Execute Javascript      var path="${element}".replace('xpath=','');var id=document.evaluate("("+path+")/ancestor::div[contains(@class,'oe_notebook_page')]/@id",document,null,XPathResult.STRING_TYPE,null).stringValue; if(id != ''){ window.location = "#"+id; $("a[href='#"+id+"']").click(); console.log("Clicked at #" + id); } return true;
 
 
 ElementPostCheck
    # Check that page is not blocked by RPC Call
    Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]
-#   Wait Until Page Contains Element	xpath=//div[contains(@class,'openerp_webclient_container') and not(contains(@class, 'oe_wait'))]
-
 
 WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
     ElementPreCheck         xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']
@@ -65,9 +62,11 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 
 # checked: 8.0 ok
 Button                      [Arguments]     ${model}    ${button_name}
-     Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-name='${button_name}']
-     Wait For Condition     return true;    20.0
-     ElementPostCheck
+   # Check that the pager is loaded. This is done in the end of Deferred.is_loaded()
+   Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_pager_value')]
+   Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-name='${button_name}']
+   Wait For Condition     return true;    20.0
+   ElementPostCheck
 
 # checked: 8.0 ok
 Many2OneSelect    [Arguments]    ${model}    ${field}    ${value}
