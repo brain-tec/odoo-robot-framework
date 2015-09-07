@@ -1,6 +1,6 @@
 # Please rename this file to config_80.py and adapt it to your needs
 
-# Selenium
+# Selenium script
 
 # Time till the next command is executed
 SELENIUM_DELAY = 0

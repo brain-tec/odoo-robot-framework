@@ -15,7 +15,7 @@ This is my test
 	MainMenu	378
 	SubMenu		380
 
-Entering Courses: form and list
+Entering Courses: form and list 
 
  	ChangeView 	form
 	ChangeView 	list

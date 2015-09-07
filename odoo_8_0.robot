@@ -178,7 +178,7 @@ SelectListView  [Arguments]    ${model}    @{fields}
          # In case the field is there, add the path to the xpath
     \    ${xpath}=    Set Variable If    '${status}' == 'PASS'    ${xpath} and descendant::td[${fieldxpath} and string()='${fieldvalue}']    ${xpath}
 
-    # remove first " and " again (5 characters)
+    # remove first " and " again (5 characters) 
     ${xpath}=   Get Substring    ${xpath}    5
     ${xpath}=    Catenate    (//table[contains(@class,'oe_list_content')]//tr[${xpath}]/td)[1]
     Click Element    xpath=${xpath}
