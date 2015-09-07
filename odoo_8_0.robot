@@ -18,8 +18,8 @@ Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    
     Set Selenium Speed                  ${SELENIUM_DELAY}
     Set Selenium Timeout                ${SELENIUM_TIMEOUT}
     Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
-    Run Keyword If                      '${db}' != 'None'                   Wait Until Page Contains Element    xpath=//select[@id='db']
-    Run Keyword If                      '${db}' != 'None'                   Select From List By Value           xpath=//select[@id='db']    ${db}
+#    Run Keyword If                      '${db}' != 'None'                   Wait Until Page Contains Element    xpath=//select[@id='db']
+#    Run Keyword If                      '${db}' != 'None'                   Select From List By Value           xpath=//select[@id='db']    ${db}
     Wait Until Page Contains Element    name=login
     Input Text                          name=login  ${user}
     Input Password                      name=password   ${password}
@@ -193,6 +193,11 @@ MainWindowButton            [Arguments]     ${button_text}
     Click Button            xpath=//td[@class='oe_application']//div[contains(@class,'oe_view_manager_current')]//button[contains(text(), '${button_text}')]
     ElementPostCheck
 
+MainWindowInput             [Arguments]   ${value}   ${description}
+    Input Text	xpath=//div[@class='oe_form_nosheet']/table/tbody/tr[2]/td[2]/span/input      ${value}
+    Input Text	xpath=//div[2]/table/tbody/tr/td[2]/div/div/div/div/div/div[3]/div/div[4]/div/div/table/tbody/tr[3]/td[2]/div/textarea       ${description}
+    ElementPostCheck
+
 MainWindowNormalField       [Arguments]     ${field}    ${value}
     Input Text              xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']  ${value}
     ElementPostCheck
@@ -204,9 +209,9 @@ MainWindowSearchTextField   [Arguments]     ${field}    ${value}
 MainWindowSearchNow
     
 MainWindowMany2One          [Arguments]     ${field}    ${value}
-    Click Element           xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']  don't wait
+    Click Element           xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}'] don't wait
     Input Text              xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']      ${value}
-    Click Element           xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']/following-sibling::span[contains(@class, 'oe-m2o-drop-down-button')]/img don't wait
+    Click Element           xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']/following-sibling::span[contains(@class, 'oe_m2o_drop_down_button')]/img don't wait
     Click Link              xpath=//ul[contains(@class, 'ui-autocomplete') and not(contains(@style, 'display: none'))]//a[self::*/text()='${value}']    don't wait
     ElementPostCheck
     
