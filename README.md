@@ -9,7 +9,7 @@ git clone https://github.com/brain-tec/odoo-robot-framework.git
 ```
 To use the database test in demo80.txt you also have to install
 ```bash
-pip install robotframework-databaselibrary
+easy_install robotframework-databaselibrary
 ```
 
 
