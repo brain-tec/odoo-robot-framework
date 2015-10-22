@@ -1,4 +1,4 @@
-** Settings ***
+*** Settings ***
 
 Documentation  Common keywords for OpenERP tests
 ...            versions of the application. The correct SUT specific resource
@@ -6,7 +6,7 @@ Documentation  Common keywords for OpenERP tests
 ...            imported here so that no other file needs to import it.
 Library     Selenium2Library
 Library     String
-Variables   config_80.py
+Variables   ${CONFIG}
 
 
 *** Keywords ***
