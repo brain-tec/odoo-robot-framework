@@ -15,8 +15,7 @@ easy_install robotframework-databaselibrary
 
 ## Run tests
 
-Save the testfile (from SE Builder) in the corresponding path, after project configuration. Then execute the script (see BT-Script repository
+Save the testfile (from SE Builder) in the same directory as the odoo-robot-framework and execute
 ```bash
-./test
-./test se-parameters.cfg
+pybot -v CONFIG:config_80.py testfile.txt
 ```
