@@ -10,6 +10,19 @@ Variables   config_80.py
 
 
 *** Keywords ***
+ELS-Website-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
+    Open Browser                        ${ODOO URL}  browser=${BROWSER}
+    Maximize Browser Window
+    Go To                               ${ODOO URL}
+    Set Selenium Speed                  ${SELENIUM_DELAY}
+    Set Selenium Timeout                ${SELENIUM_TIMEOUT}
+    Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
+    Wait Until Page Contains Element    name=login
+    Input Text                          name=login  ${user}
+    Input Password                      name=password   ${password}
+    Click Button                        xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
+    Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_website_sale')]
+
 # checked: 8.0 ok
 Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
     Open Browser                        ${ODOO URL}  browser=${BROWSER}
@@ -55,7 +68,7 @@ ElementPreCheck    [Arguments]    ${element}
 
 ElementPostCheck
    # Check that page is not blocked by RPC Call
-   Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]
+   Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]	2 min
 #   Wait Until Page Contains Element	xpath=//div[contains(@class,'openerp_webclient_container') and not(contains(@class, 'oe_wait'))]
 
 
@@ -65,6 +78,7 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 
 # checked: 8.0 ok
 Button                      [Arguments]     ${model}    ${button_name}
+     Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_pager_value')]
      Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-name='${button_name}']
      Wait For Condition     return true;    20.0
      ElementPostCheck
