@@ -9,7 +9,7 @@ git clone https://github.com/brain-tec/odoo-robot-framework.git
 ```
 To use the database test in demo80.txt you also have to install
 ```bash
-pip install robotframework-databaselibrary
+easy_install robotframework-databaselibrary
 ```
 
 
@@ -17,5 +17,5 @@ pip install robotframework-databaselibrary
 
 Save the testfile (from SE Builder) in the same directory as the odoo-robot-framework and execute
 ```bash
-pybot testfile.txt
+pybot -v CONFIG:config_80.py testfile.txt
 ```
