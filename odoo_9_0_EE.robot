@@ -25,7 +25,13 @@ Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO
 	Input Password	name=password   ${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
 	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
-	
+
+# ok: 90EE
+BackToMainMenu
+	Click Link	xpath=//a[contains(@class, 'o_menu_toggle')]
+	Wait Until Page Contains Element	xpath=//body[contains(@class, 'o_web_client')]
+	ElementPostCheck
+
 # ok: 90EE
 MainMenu	[Arguments]	${menu}
 	Click Link	xpath=//a[@data-menu='${menu}']
@@ -43,10 +49,10 @@ SubSubMenu	[Arguments]	${menu}
 	ElementPostCheck
 
 
-# checked: 8.0 ok
+# checked: 9.0 ok
 ChangeView	[Arguments]	${view}
-   Click Link	xpath=//ul[contains(@class,'oe_view_manager_switch')]//a[contains(@data-view-type,'${view}')]
-   Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_view_manager_view_${view}') and not(contains(@style, 'display: none'))]
+   Click Button	xpath=//div[contains(@class,'o_cp_switch_buttons')]/button[@data-view-type='${view}']
+   Wait Until Page Contains Element	xpath=//*[contains(@class,'o_${view}_view') and not(contains(@style, 'display: none'))]
    ElementPostCheck
 
 # main window
@@ -58,7 +64,7 @@ SelectNotebook	[Arguments]	${element}
 	# Element may be in a tab. So click the parent tab. If there is no parent tab, forget about the result
 	${modal}=	IsModal
 	${element}=	Set Variable If	'${modal}' == 'PASS'	(//div[contains(@class,'modal-content')][last()])${element}	${element}
-	Execute Javascript	var path="${element}".replace('xpath=','');var id=document.evaluate("("+path+")/ancestor::div[contains(@class,'oe_notebook_page')]/@id",document,null,XPathResult.STRING_TYPE,null).stringValue; if(id != ''){ window.location = "#"+id; $("a[href='#"+id+"']").click(); console.log("Clicked at #" + id); } return true;
+	Execute Javascript	var path="${element}".replace('xpath=','');var id=document.evaluate("("+path+")/ancestor::div[@role='tabpanel']/@id",document,null,XPathResult.STRING_TYPE,null).stringValue; if(id != ''){ $("a[href='#"+id+"']").click(); console.log("Clicked at #" + id); } return true;
 
 # ok: 90EE
 IsModal
@@ -71,8 +77,8 @@ Modal	[Arguments]	${command}	${xpath}	${value}=
 	${modal}=	IsModal
 	${xpath}=	Set Variable If	'${modal}' == 'PASS'	(//div[contains(@class,'modal-content')])[last()]${xpath}	${xpath}
 	Log	${xpath}
-	Run Keyword Unless	'${value}' == ''	${command}	xpath=${xpath}	${value}
-	Run Keyword If	'${value}' == ''	${command}	xpath=${xpath}
+	Run Keyword If	'''${value}'''	${command}	xpath=${xpath}	${value}
+	Run Keyword Unless	'''${value}'''	${command}	xpath=${xpath}
 
 # ok: 90EE
 ElementPostCheck
@@ -123,7 +129,7 @@ Float	[Arguments]	${model}	${field}	${value}
 
 Text	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
