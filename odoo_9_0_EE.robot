@@ -22,7 +22,7 @@ Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    
     Input Text                          name=login  ${user}
     Input Password                      name=password   ${password}
     Click Button                        xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
-    Go To	${ODOO URL}/web?debug=#
+    Go To	                            ${ODOO URL}/web?debug=#
     Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
 
 # ok: 90EE
