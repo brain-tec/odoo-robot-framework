@@ -12,18 +12,18 @@ Variables   config_80.py
 *** Keywords ***
 # checked: 9.0 ok
 Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
-    Open Browser                        ${ODOO URL}  browser=${BROWSER}
-    Maximize Browser Window
-    Go To                               ${ODOO URL}/web?db=${ODOO_DB}
-    Set Selenium Speed                  ${SELENIUM_DELAY}
-    Set Selenium Timeout                ${SELENIUM_TIMEOUT}
-    Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
-    Wait Until Page Contains Element    name=login
-    Input Text                          name=login  ${user}
-    Input Password                      name=password   ${password}
-    Click Button                        xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
-    Go To	                            ${ODOO URL}/web?debug=#
-    Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
+	Open Browser	${ODOO URL}  browser=${BROWSER}
+	Maximize Browser Window
+	Go To                           ${ODOO URL}
+	Set Selenium Speed	            ${SELENIUM_DELAY}
+	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
+	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
+	Click Element	xpath=//div[1]/div/div[2]/a[@href="/web?db=${ODOO_DB}"]
+	Wait Until Page Contains Element	name=login
+	Input Text	name=login  ${user}
+	Input Password	name=password	${password}
+	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
+	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
 
 # ok: 90EE
 BackToMainMenu
