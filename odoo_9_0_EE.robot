@@ -279,3 +279,33 @@ MainWindowMany2One	[Arguments]	${field}	${value}
 	Click Link	xpath=//ul[contains(@class, 'ui-autocomplete') and not(contains(@style, 'display: none'))]//a[self::*/text()='${value}']	don't wait
 	ElementPostCheck
 	
+Connect
+    Connect To Database Using Custom Params		psycopg2     database='${ODOO_DB}',user='${DBUSER}',password='${DBPASSWORD}',host='localhost',port='${LOCAL_PORT}'
+
+SubMenuXMLid    [Arguments]    ${Name}
+    Connect
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    @{SubMenuID}		    Query		               SELECT res_id from ir_model_data where model = 'ir.ui.menu' and module = '${MODULE}' and name='${NAME}';
+    ${SubMenuID}=           Convert To List            ${SubMenuID}
+    Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID[0][0]}
+    Disconnect from Database
+    
+SubSubMenuXMLid    [Arguments]    ${Name}
+    Connect
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    @{SubSubMenuID}		    Query		               SELECT res_id from ir_model_data where model = 'ir.ui.menu' and module = '${MODULE}' and name='${NAME}';
+    ${SubSubMenuID}=        Convert To List            ${SubSubMenuID}
+    Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID[0][0]}
+    Disconnect from Database
+
+MainMenuXMLid    [Arguments]    ${Name}
+    Connect
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    @{MainMenuID}		    Query		               SELECT res_id from ir_model_data where model = 'ir.ui.menu' and module = '${MODULE}' and name='${NAME}';
+    ${MainMenuID}=          Convert To List            ${MainMenuID}
+    Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID[0][0]}
+    Disconnect from Database
+	
