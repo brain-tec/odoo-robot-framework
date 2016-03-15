@@ -1,0 +1,256 @@
+{ 
+  "type": "script",
+  "seleniumVersion": "2",
+  "formatVersion": 2,
+  "steps": [
+    {
+      "type": "get",
+      "url": "http://localhost:8069/"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: B#[object Object]=Sign in"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: INPUT#[object Object]="
+      },
+      "text": "admin"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: INPUT#[object Object]="
+      },
+      "text": "admin"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Button    undefined    "
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "MainMenu    378"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Button    openacademy.course    oe_list_add"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Char    openacademy.course    name"
+      },
+      "text": "Course_Selenium"
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Text    openacademy.course    description"
+      },
+      "text": "This is to test Selenium is working accordingly."
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Many2OneSelect    openacademy.course    responsible"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "ERROR: Please check the documentation how to record Many2One fields"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: A#[object Object]=Salesman1"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Text    openacademy.course    description"
+      },
+      "text": "This is the description tab, at the bottom of the page."
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "NotebookPage    Sessions"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "NewOne2Many    openacademy.course    session_ids"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Char    openacademy.session    name"
+      },
+      "text": "Session_Selenium"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: TD#[object Object]=\n        \n            \n        \n            \n        \n        \n    "
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Char    openacademy.session    description"
+      },
+      "text": "This is a session meant for Selenium purposes"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: IMG#[object Object]="
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: A#[object Object]=4"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: IMG#[object Object]="
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: A#[object Object]=6"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: SPAN#[object Object]=\n        0.00%\n    "
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Many2OneSelect    openacademy.session    course_id"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "ERROR: Please check the documentation how to record Many2One fields"
+      }
+    },
+    {
+      "type": "setElementText",
+      "locator": {
+        "type": "openerp70",
+        "value": "Many2OneSelect    openacademy.session    course_id"
+      },
+      "text": "Course1"
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: A#[object Object]=Course1"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Many2OneSelect    openacademy.session    instructor"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "ERROR: Please check the documentation how to record Many2One fields"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: A#[object Object]=Administrator"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "SelectListView\tres.partner\t\tdisplay_name=Agrolait\tphone=+32 10 588 558\temail=agrolait@yourcompany.example.com\tdate_review_next=\tgrade_id=\tactivation="
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Button    undefined    oe_form_button_save_and_close"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "Button    openacademy.course    oe_form_button_save"
+      }
+    },
+    {
+      "type": "clickElement",
+      "locator": {
+        "type": "openerp70",
+        "value": "No match: SPAN#[object Object]=Administrator"
+      }
+    }
+  ],
+  "data": {
+    "configs": {},
+    "source": "none"
+  },
+  "inputs": [],
+  "timeoutSeconds": 60
+}
