@@ -25,6 +25,14 @@ def create_new_db(URL, password, name, demo = False, user_password='admin'):
         return True
     return False
 
+def drop_db(URL, password, name):
+    connection = erppeek.Client(URL)
+    echo="fail"
+    try:
+        connection.db.drop(password, name)
+    except:
+        return echo
+
 def install_module(URL, DBname, password, module):
     connection = erppeek.Client(URL, db=DBname, user="admin", password=password, transport=None, verbose=False)
     install = connection.install(module)
@@ -55,9 +63,7 @@ def get_res_id(URL, DBname, login, password, model, module, name):
     return ir_model_obj['res_id']
 
 def get_stock(URL, DBname, login, password, model, product_id):
-    
     connection = erppeek.Client(URL, DBname, login, password, transport=None, verbose=False)
-    cr=connection.cursor()
     stock = connection.model(model)
     stock_obj = stock.search([('product_id','=', int(product_id))])
     if not stock_obj:
@@ -70,7 +76,6 @@ def get_stock(URL, DBname, login, password, model, product_id):
     for element in stock_obj:
         stock_aux = stock.read(element, ["qty", "location_id"])
         returnValue.append([stock_aux["qty"], stock_aux['location_id'][0]])
-    cr.rollback()
     return returnValue
 
 def get_stock_move(URL, DBname, login, password, model, product_id, variable_name, variable):
@@ -88,6 +93,18 @@ def get_stock_move(URL, DBname, login, password, model, product_id, variable_nam
         stock_aux = stock_move.read(element, ["product_uom_qty", "picking_type_id"])
         returnValue.append([stock_aux["product_uom_qty"], stock_aux['picking_type_id']])
     return returnValue
+
+def get_id(URL, DBname, login, password, model, product_tmpl_id):
+    
+    connection = erppeek.Client(URL, DBname, login, password, transport=None, verbose=False)
+    product_product = connection.model(model)
+    product_product_obj = product_product.search([("product_tmpl_id","=", int(product_tmpl_id))])
+    if not product_product_obj:
+        return False
+    if not isinstance(product_product_obj, list):
+        product_product_obj = [product_product_obj]
+    product_product_id = product_product.read(product_product_obj[0], ["id"])
+    return product_product_id['id']
 
 def get_menu_res_id(URL, DBname, login, password, module, name):
     return get_res_id(URL, DBname, login, password, model= 'ir.ui.menu', module=module, name=name)
