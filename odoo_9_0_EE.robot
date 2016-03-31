@@ -132,8 +132,10 @@ Text	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
-	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	#SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	#Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
+	Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
 	ElementPostCheck
 
 Checkbox	[Arguments]	${model}	${field}
