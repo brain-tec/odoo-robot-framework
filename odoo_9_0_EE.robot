@@ -142,8 +142,8 @@ Checkbox	[Arguments]	${model}	${field}
 	Click Element	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
-NotebookPage	[Arguments]	${model}=None
-	Wait For Condition	return true;
+NotebookPage	[Arguments]	${model}
+	Click Element	xpath=//div[@class='o_notebook']//li/a[@data-bt-testing-original-string='${model}']
 
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
