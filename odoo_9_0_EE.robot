@@ -87,7 +87,6 @@ ElementPostCheck
    # Check that page is not blocked by RPC Call
    Wait Until Page Contains Element	xpath=//body[not(contains(@class, 'oe_wait'))]	timeout=2min
 
-
 WriteInField	[Arguments]	${model}	${fieldname}	${value}	${submodel}=
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']
 	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']	${value}
@@ -281,12 +280,19 @@ SelectListView  [Arguments]	${model}	@{fields}
 	Click Element	xpath=${xpath}
 	ElementPostCheck
 
-SidebarAction  [Arguments]	${type}	${id}
+SidebarActionOld  [Arguments]	${type}	${id}
 	# open the menu
 	ClickElement   xpath=//div[contains(@class,'o_cp_sidebar')]//div[contains(@class,'o_dropdown') and descendant::a[@data-bt-type='${type}' and @data-bt-id='${id}']]/button[contains(@class,'oe_dropdown_toggle')]
 	# click on the menuentry
 	ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
 	ElementPostCheck
+
+SidebarAction  [Arguments]	${type}	${index}
+	# open the menu
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[@class='o_dropdown' and @data-bt-type='${type}']
+	# click on the menuentry
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[contains(@class,'o_dropdown') and @data-bt-type='${type}']/ul/li/a[@data-section='${type}' and @data-index='${index}']
+
 
 MainWindowButton	[Arguments]	${button_text}
 	Click Button	xpath=//td[@class='oe_application']//div[contains(@class,'oe_view_manager_current')]//button[contains(text(), '${button_text}')]
