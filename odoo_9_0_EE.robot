@@ -257,7 +257,7 @@ SidebarAction  [Arguments]	${type}	${id}
 	# open the menu
 	ClickElement   xpath=//div[contains(@class,'o_cp_sidebar')]//div[contains(@class,'o_dropdown') and descendant::a[@data-bt-type='${type}' and @data-bt-id='${id}']]/button[contains(@class,'oe_dropdown_toggle')]
 	# click on the menuentry
-	ClickLink   xpath=//div[contains(@clMass,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
+	ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
 	ElementPostCheck
 
 MainWindowButton	[Arguments]	${button_text}
