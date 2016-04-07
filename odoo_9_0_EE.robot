@@ -12,13 +12,13 @@ Variables   config_80.py
 *** Keywords ***
 # checked: 8.0 ok
 Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO_DB}
-	Open Browser	${ODOO URL}  browser=${BROWSER}
+	Open Browser	${ODOO URL}/web?db=${db}  browser=${BROWSER}
 	Maximize Browser Window
 	Go To	${ODOO URL}
 	Set Selenium Speed	${SELENIUM_DELAY}
 	Set Selenium Timeout	${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
-#	Run Keyword If	'${db}' != 'None'	Wait Until Page Contains Element	xpath=//select[@id='db']
+#	Run Keyword If	Page Contains Element	xpath=//div[contains(@class,'o_database_list')]	Wait Until Page Contains Element	xpath=//select[@id='db']
 #	Run Keyword If	'${db}' != 'None'	Select From List By Value	xpath=//select[@id='db']	${db}
 	Wait Until Page Contains Element	name=login
 	Input Text	name=login  ${user}
@@ -104,7 +104,8 @@ Button
 Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
+	# open autocomplete is always in the mainpage (also when modal)
+	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
 # ok: 90EE ok (Mainpage)
@@ -162,7 +163,7 @@ X2Many-Text	[Arguments]	${model}	${field}	${value}
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 Checkbox-Select	[Arguments]	${model}	${field}
@@ -256,7 +257,7 @@ SidebarAction  [Arguments]	${type}	${id}
 	# open the menu
 	ClickElement   xpath=//div[contains(@class,'o_cp_sidebar')]//div[contains(@class,'o_dropdown') and descendant::a[@data-bt-type='${type}' and @data-bt-id='${id}']]/button[contains(@class,'oe_dropdown_toggle')]
 	# click on the menuentry
-	ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
+	ClickLink   xpath=//div[contains(@clMass,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
 	ElementPostCheck
 
 MainWindowButton	[Arguments]	${button_text}
