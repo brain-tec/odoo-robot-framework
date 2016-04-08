@@ -59,6 +59,43 @@ SubMenu    [Arguments]    ${menu}
     Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_view_manager_body')]
 
 # checked: 8.0 ok
+MenuL1    [Arguments]    ${m1}
+	${m1_id}    GetMainMenuByName    ${m1}
+	MainMenu    ${m1_id}
+
+# checked: 8.0 ok
+MenuL2    [Arguments]    ${m1}    ${m2}    ${m3}
+	${m1_id}    GetMainMenuByName    ${m1}
+	${m2_id}    GetSubMenuByParentAndName    ${m1_id}    ${m2}
+	${m3_id}    GetSubMenuByParentAndName    ${m2_id}    ${m3}
+	MainMenu    ${m1_id}
+	SubMenu    ${m3_id}
+
+# checked: 8.0 ok
+MenuL3    [Arguments]    ${m1}    ${m2}    ${m3}    ${m4}
+	${m1_id}    GetMainMenuByName    ${m1}
+	${m2_id}    GetSubMenuByParentAndName    ${m1_id}    ${m2}
+	${m3_id}    GetSubMenuByParentAndName    ${m2_id}    ${m3}
+	${m4_id}    GetSubMenuByParentAndName    ${m3_id}    ${m4}
+	MainMenu    ${m1_id}
+	SubMenu    ${m3_id}
+	SubMenu    ${m4_id}
+
+# Helper for MenuLX Keyword (checked: 8.0 ok)
+GetMainMenuByName    [Arguments]    ${main_menu}
+	DatabaseConnect
+	${queryResults}    Query    select id from ir_ui_menu where parent_id is null and name = '${main_menu}';
+	DatabaseDisconnect
+	Return From Keyword    ${queryResults[0][0]}
+
+# Helper for MenuLX Keyword (checked: 8.0 ok)
+GetSubMenuByParentAndName    [Arguments]    ${parent_menu_id}    ${sub_menu}
+	DatabaseConnect
+	${queryResults}    Query    select id from ir_ui_menu where parent_id = ${parent_menu_id} and name = '${sub_menu}';
+	DatabaseDisconnect
+	Return From Keyword    ${queryResults[0][0]}
+
+# checked: 8.0 ok
 ChangeView    [Arguments]    ${view}
    Click Link                          xpath=//div[contains(@class,'openerp')][last()]//ul[contains(@class,'oe_view_manager_switch')]//a[contains(@data-view-type,'${view}')]
    Wait Until Page Contains Element    xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_view_manager_view_${view}') and not(contains(@style, 'display: none'))]
