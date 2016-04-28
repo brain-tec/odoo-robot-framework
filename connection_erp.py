@@ -15,7 +15,7 @@ except:
     print "Please install sudo pip install -U erppeek"
 
 def create_new_db(URL, password, name, demo = False, user_password='admin'):
-    if demo == "True" or "u'True" or demo:
+    if (demo == "True" or demo == "u'True" or demo):
         demo = True
     else:
         demo=False
