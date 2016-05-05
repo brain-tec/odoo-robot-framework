@@ -91,6 +91,8 @@ WriteInField	[Arguments]	${model}	${fieldname}	${value}	${submodel}=
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']
 	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']	${value}
 
+Radio	[Arguments]	${model}	${field}	${value}
+	Click Element	 xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @value='${value}']
 
 # ok: 9.0EE ok (Mainpage)
 Button
