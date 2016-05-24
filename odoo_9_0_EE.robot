@@ -68,7 +68,7 @@ SelectNotebook	[Arguments]	${element}
 # ok: 90EE
 IsModal
 	# Check if modal is open
-	Set Selenium Implicit Wait	2s	
+	Set Selenium Implicit Wait	1s	
 	${modal}	${value}=		Run Keyword And Ignore Error	Element Should Be Visible	xpath=//div[contains(@class,'modal')]
 	#Page should Contain Element	xpath=//div[contains(@class,'modal')]
 	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
@@ -198,12 +198,10 @@ Select-Option	[Arguments]	${model}	${field}	${value}
 
 Checkbox	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
-	#Checkbox Should Not Be Selected	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	Click Element	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
 X2Many-Checkbox	[Arguments]	${model}	${field}
-	Checkbox Should Not Be Selected	xpath=//input[@type='checkbox' and ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Click Element	xpath=//input[@type='checkbox' and ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
