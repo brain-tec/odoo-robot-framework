@@ -47,6 +47,24 @@ SubSubMenu	[Arguments]	${menu}
 	Click Link	xpath=//a[@data-menu='${menu}']
 	ElementPostCheck
 
+SubMenuXMLid    [Arguments]		${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
+   
+MainMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
+    
+SubSubMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+    ${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID}
+
 
 # checked: 9.0 ok
 ChangeView	[Arguments]	${view}

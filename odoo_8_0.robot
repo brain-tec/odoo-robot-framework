@@ -50,6 +50,19 @@ SubMenu    [Arguments]    ${menu}
     Click Link				xpath=//td[contains(@class,'oe_leftbar')]//ul/li/a[@data-menu='${menu}']
     Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_view_manager_body')]
 
+SubMenuXMLid    [Arguments]		${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
+   
+MainMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
+
+
 # checked: 8.0 ok
 ChangeView    [Arguments]    ${view}
    Click Link                          xpath=//div[contains(@class,'openerp')][last()]//ul[contains(@class,'oe_view_manager_switch')]//a[contains(@data-view-type,'${view}')]
