@@ -19,6 +19,7 @@ Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
+	run keyword and ignore error        Click element   //a[@href="/web/login"]
 	Wait Until Page Contains Element	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
