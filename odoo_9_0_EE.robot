@@ -11,7 +11,7 @@ Variables   config_80.py
 
 *** Keywords ***
 # checked: 9.0 ok
-Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO_DB}
+Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}
 	Maximize Browser Window
 	Go To                           ${ODOO URL}
