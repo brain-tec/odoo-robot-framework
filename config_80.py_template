@@ -14,6 +14,6 @@ SERVER = "localhost"
 PORT = "8069"
 ODOO_URL = "http://" + SERVER + ":" + PORT
 ODOO_DB = "demo"
-ODOO_USER = "admin"
-ODOO_PASSWORD = "admin"
+USER = "admin"
+PASSWORD = "admin"
 

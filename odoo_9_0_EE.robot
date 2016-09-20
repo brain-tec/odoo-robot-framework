@@ -142,6 +142,7 @@ Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
 
 # ok: 90EE ok (Mainpage)
 X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
@@ -156,6 +157,7 @@ Date	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
@@ -174,6 +176,7 @@ CharWizard	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Char	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
@@ -184,6 +187,7 @@ Float	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Float	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
@@ -204,6 +208,7 @@ TextWizard	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Text	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
@@ -221,6 +226,7 @@ Checkbox	[Arguments]	${model}	${field}
 	ElementPostCheck
 
 X2Many-Checkbox	[Arguments]	${model}	${field}
+    X2Many
 	Click Element	xpath=//input[@type='checkbox' and ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
@@ -271,6 +277,9 @@ One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
 	Click Element	xpath=${xpath}
 	ElementPostCheck
 
+X2Many
+    Click Element   //div[@class='o_list_editable']//tbody[@class='ui-sortable']
+    ElementPostCheck
 
 SelectListView  [Arguments]	${model}	@{fields}
 	# Initialize variable
