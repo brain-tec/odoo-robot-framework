@@ -10,19 +10,19 @@ Variables   config_80.py
 
 
 *** Keywords ***
-# checked: 8.0 ok
-Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO_DB}
-	Open Browser	${ODOO URL}/web?db=${db}  browser=${BROWSER}
+# checked: 9.0 ok
+Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
+	Open Browser	${ODOO URL}  browser=${BROWSER}
 	Maximize Browser Window
-	Go To	${ODOO URL}
-	Set Selenium Speed	${SELENIUM_DELAY}
-	Set Selenium Timeout	${SELENIUM_TIMEOUT}
-	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
-#	Run Keyword If	Page Contains Element	xpath=//div[contains(@class,'o_database_list')]	Wait Until Page Contains Element	xpath=//select[@id='db']
-#	Run Keyword If	'${db}' != 'None'	Select From List By Value	xpath=//select[@id='db']	${db}
+	Go To                           ${ODOO URL}
+	Set Selenium Speed	            ${SELENIUM_DELAY}
+	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
+	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
+	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
+	run keyword and ignore error        Click element   //a[@href="/web/login"]
 	Wait Until Page Contains Element	name=login
 	Input Text	name=login  ${user}
-	Input Password	name=password   ${password}
+	Input Password	name=password	${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
 	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
 
@@ -48,6 +48,24 @@ SubSubMenu	[Arguments]	${menu}
 	Click Link	xpath=//a[@data-menu='${menu}']
 	ElementPostCheck
 
+SubMenuXMLid    [Arguments]		${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
+   
+MainMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
+    
+SubSubMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+    ${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID}
+
 
 # checked: 9.0 ok
 ChangeView	[Arguments]	${view}
@@ -69,7 +87,10 @@ SelectNotebook	[Arguments]	${element}
 # ok: 90EE
 IsModal
 	# Check if modal is open
-	${modal}	${value}=	Run Keyword And Ignore Error	Page Should Contain Element	xpath=//div[contains(@class,'modal')]
+	Set Selenium Implicit Wait	1s	
+	${modal}	${value}=		Run Keyword And Ignore Error	Element Should Be Visible	xpath=//div[contains(@class,'modal')]
+	#Page should Contain Element	xpath=//div[contains(@class,'modal')]
+	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
 	[return]	${modal}
 
 # ok: 90EE
@@ -85,11 +106,12 @@ ElementPostCheck
    # Check that page is not blocked by RPC Call
    Wait Until Page Contains Element	xpath=//body[not(contains(@class, 'oe_wait'))]	timeout=2min
 
-
 WriteInField	[Arguments]	${model}	${fieldname}	${value}	${submodel}=
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']
 	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']	${value}
 
+Radio	[Arguments]	${model}	${field}	${value}
+	Click Element	 xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @value='${value}']
 
 # ok: 9.0EE ok (Mainpage)
 Button
@@ -99,17 +121,28 @@ Button
 	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
+ButtonWizard
+	[Arguments]	${model}=	${button_name}=	${class}=
+	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
+	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+	ElementPostCheck
 
 # ok: 90EE ok (Mainpage)
 Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	# open autocomplete is always in the mainpage (also when modal)
+	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
+	ElementPostCheck
+	
+Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
 # ok: 90EE ok (Mainpage)
 X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
@@ -124,6 +157,7 @@ Date	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
@@ -133,53 +167,71 @@ Char	[Arguments]	${model}	${field}	${value}
 	Modal	Clear Element Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
+	
+# ok: 9.0EE
+CharWizard	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Clear Element Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	ElementPostCheck
 
 X2Many-Char	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 Float	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Clear Element Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 X2Many-Float	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
+FloatWizard	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	ElementPostCheck
+
 Text	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Clear Element Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	ElementPostCheck
+	
+TextWizard	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 X2Many-Text	[Arguments]	${model}	${field}	${value}
+    X2Many
 	Modal	Clear Element Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
-	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	#SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	#Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
+	Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
 	ElementPostCheck
 
-Checkbox-Select	[Arguments]	${model}	${field}
+Checkbox	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
-	Checkbox Should Not Be Selected	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	Click Element	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
-X2Many-Checkbox-Select	[Arguments]	${model}	${field}
-	Checkbox Should Not Be Selected	xpath=//input[@type='checkbox' and ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
+X2Many-Checkbox	[Arguments]	${model}	${field}
+    X2Many
 	Click Element	xpath=//input[@type='checkbox' and ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	ElementPostCheck
 
-
-NotebookPage	[Arguments]	${model}=None
-	Wait For Condition	return true;
+NotebookPage	[Arguments]	${string}
+	Click Element	xpath=//div[@class='o_notebook']//li/a[@data-bt-testing-original-string='${string}']
 
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
@@ -225,6 +277,9 @@ One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
 	Click Element	xpath=${xpath}
 	ElementPostCheck
 
+X2Many
+    Click Element   //div[@class='o_list_editable']//tbody[@class='ui-sortable']
+    ElementPostCheck
 
 SelectListView  [Arguments]	${model}	@{fields}
 	# Initialize variable
@@ -253,12 +308,19 @@ SelectListView  [Arguments]	${model}	@{fields}
 	Click Element	xpath=${xpath}
 	ElementPostCheck
 
-SidebarAction  [Arguments]	${type}	${id}
+SidebarActionOld  [Arguments]	${type}	${id}
 	# open the menu
 	ClickElement   xpath=//div[contains(@class,'o_cp_sidebar')]//div[contains(@class,'o_dropdown') and descendant::a[@data-bt-type='${type}' and @data-bt-id='${id}']]/button[contains(@class,'oe_dropdown_toggle')]
 	# click on the menuentry
 	ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
 	ElementPostCheck
+
+SidebarAction  [Arguments]	${type}	${index}
+	# open the menu
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[@class='o_dropdown' and @data-bt-type='${type}']
+	# click on the menuentry
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[contains(@class,'o_dropdown') and @data-bt-type='${type}']/ul/li/a[@data-section='${type}' and @data-index='${index}']
+
 
 MainWindowButton	[Arguments]	${button_text}
 	Click Button	xpath=//td[@class='oe_application']//div[contains(@class,'oe_view_manager_current')]//button[contains(text(), '${button_text}')]

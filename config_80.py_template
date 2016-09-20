@@ -13,9 +13,7 @@ BROWSER = "ff"
 SERVER = "localhost"
 PORT = "8069"
 ODOO_URL = "http://" + SERVER + ":" + PORT
-ODOO_USER = "admin"
-ODOO_PASSWORD = "admin"
 ODOO_DB = "demo"
-ODOO_DB_PORT = "5432"
-ODOO_DB_USER = "postgres"
-ODOO_DB_PASSWORD = "postgres"
+USER = "admin"
+PASSWORD = "admin"
+
