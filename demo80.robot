@@ -7,11 +7,11 @@ Resource       odoo_8_0.robot
 *** Test Cases ***
 # make some checks in DB
 Check in DB
-        Connect To Database Using Custom Params	psycopg2        database='odoo8_selenium',user='openerp',password='postgres',host='localhost',port=5432
+        DatabaseConnect
         @{queryResults}         Query           select * from res_partner
         Log Many                @{queryResults}
         Check if exists in database             select * from res_partner WHERE name='Agrolait'
-        Disconnect from Database
+        DatabaseDisconnect
 
 Valid Login
 	Login		admin	admin	odoo8_selenium
