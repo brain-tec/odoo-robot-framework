@@ -19,7 +19,7 @@ Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
-	run keyword and ignore error        Click element   //a[@href="/web/login"]
+	#run keyword and ignore error        Click element   //a[@href="/web/login"]
 	Wait Until Page Contains Element	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
@@ -142,7 +142,7 @@ Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
 
 # ok: 90EE ok (Mainpage)
 X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
-	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
