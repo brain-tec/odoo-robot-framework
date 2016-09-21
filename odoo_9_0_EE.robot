@@ -278,7 +278,7 @@ One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
 	ElementPostCheck
 
 X2Many
-    Click Element   //div[@class='o_list_editable']//tbody[@class='ui-sortable']
+    run keyword and ignore error  Click element      //div[@class='o_list_editable']//tbody[@class='ui-sortable']
     ElementPostCheck
 
 SelectListView  [Arguments]	${model}	@{fields}
