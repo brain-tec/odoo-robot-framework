@@ -48,19 +48,19 @@ SubSubMenu	[Arguments]	${menu}
 	Click Link	xpath=//a[@data-menu='${menu}']
 	ElementPostCheck
 
-SubMenuXMLid    [Arguments]		${Name}		${USER}		${PASSWORD}
+SubMenuXMLid    [Arguments]		${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
    
-MainMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+MainMenuXMLid    [Arguments]    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
     
-SubSubMenuXMLid    [Arguments]    ${Name}		${USER}		${PASSWORD}
+SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
@@ -146,6 +146,7 @@ X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
+
 # The blue arrow on the right side of a many2one
 Many2One-External	[Arguments]	${model}	${field}
 	Modal	Click Button	xpath=//div[contains(@class,'o_form_field_many2one') and .//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//button[contains(@class,'o_external_button')]
@@ -174,8 +175,8 @@ CharWizard	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Char	[Arguments]	${model}	${field}	${value}
-	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
+	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 Float	[Arguments]	${model}	${field}	${value}
