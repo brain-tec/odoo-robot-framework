@@ -4,8 +4,9 @@ Documentation  Common keywords for OpenERP tests
 ...	versions of the application. The correct SUT specific resource
 ...	is imported based on ${SUT} variable. SeleniumLibrary is also
 ...	imported here so that no other file needs to import it.
-Library	Selenium2Library
-Library	String
+Library	    Selenium2Library
+Library  	String
+Library     connection_erp.py
 Variables   config_80.py
 
 
@@ -210,10 +211,10 @@ X2Many-Text	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
-	#SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	#Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
-	SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
-	Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
+	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
+	#Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
 	ElementPostCheck
 
 Checkbox	[Arguments]	${model}	${field}
