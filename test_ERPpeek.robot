@@ -1,20 +1,23 @@
 *** Settings ***
 
 Documentation  Common keywords for OpenERP tests
-Resource       odoo_8_0.robot
 Resource       odoo_EBev.robot
 Library     Selenium2Library
 Library     String
-Variables   ${CONFIG}
+Variables      config_80.py
 Library     connection_erp.py
 
 *** Test Cases ***
+Drop DB
+	${drop}=	Drop Db	http://localhost:8069	admin	${ODOO_DB}
+	log to console	${drop}
 Create db
+	sleep	10s
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
-	${created}=	Create New Db	http://localhost:8069	admin	test_create_db	True	admin
+	${created}=	Create New Db	http://localhost:8069	admin	${ODOO_DB}	True	admin
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
-Install module
+*Install module*
 	#url, DB_name, db_pw, module_name
 	${module_installed}=	Install Module	http://localhost:8069	test_create_db	admin	l10n_ch
 	log to console	${module_installed}
@@ -27,3 +30,8 @@ uninstall
 	${module_uninstalled}=	Uninstall Module	http://localhost:8069	test_create_db	admin	l10n_ch
 	log to console	${module_uninstalled}
 	Run Keyword Unless	${module_uninstalled}	Fail
+Install second module
+	#url, DB_name, db_pw, module_name
+	${module_installed}=	Install Module	http://localhost:8069	test_create_db	admin	crm
+	log to console	${module_installed}
+	Run Keyword Unless	${module_installed}	Fail
