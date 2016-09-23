@@ -31,7 +31,6 @@ def create_new_db(URL, password, name, demo = False, user_password='admin'):
     return False
 
 def drop_db(URL, password, name):
-    print 'drop DB: ',URL
     connection = erppeek.Client(URL)
     echo="fail"
     try:

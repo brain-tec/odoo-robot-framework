@@ -17,7 +17,7 @@ Create db
 	${created}=	Create New Db	http://localhost:8069	admin	${ODOO_DB}	True	admin
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
-*Install module*
+Install module
 	#url, DB_name, db_pw, module_name
 	${module_installed}=	Install Module	http://localhost:8069	test_create_db	admin	l10n_ch
 	log to console	${module_installed}
