@@ -4,18 +4,7 @@
 #    Copyright (c) 2016 brain-tec AG (http://www.braintec-group.com)
 #    All Right Reserved
 #
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#    See LICENSE file for full licensing details.
 ##############################################################################
 import logging
 logger = logging.getLogger(__name__)
@@ -26,11 +15,16 @@ except:
     print "Please install sudo pip install -U erppeek"
 
 def create_new_db(URL, password, name, demo = False, user_password='admin'):
-    if (demo == "True" or demo == "u'True" or demo):
+    connection = erppeek.Client(URL)
+    database_exists = name in connection.db.list()
+    if database_exists:
+        print("Database {} exists".format(name))
+        drop_db(URL, password, name)
+    if demo == "True" or "u'True" or demo:
         demo = True
     else:
         demo=False
-    connection = erppeek.Client(URL)
+    
     db = connection.create_database (password, name, demo ,lang='en_US',user_password=user_password)
     if db==1:
         return True

@@ -212,7 +212,7 @@ X2Many-Text	[Arguments]	${model}	${field}	${value}
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Label	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
 	#Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
 	ElementPostCheck
