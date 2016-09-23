@@ -14,18 +14,14 @@ try:
 except:
     print "Please install sudo pip install -U erppeek"
 
-def create_new_db(URL, password, name, demo = False, user_password='admin'):
+def create_new_db(URL, password, name, demo = False, user_password='admin', lang='en_US'):
     connection = erppeek.Client(URL)
-    database_exists = name in connection.db.list()
-    if database_exists:
-        print("Database {} exists".format(name))
-        drop_db(URL, password, name)
-    if demo == "True" or "u'True" or demo:
+    if demo == "True" or demo == "u'True" or demo==True:
         demo = True
     else:
         demo=False
-    
-    db = connection.create_database (password, name, demo ,lang='en_US',user_password=user_password)
+
+    db = connection.create_database (password, name, demo ,lang,user_password=user_password)
     if db==1:
         return True
     return False
