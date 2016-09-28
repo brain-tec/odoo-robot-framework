@@ -89,7 +89,7 @@ SelectNotebook	[Arguments]	${element}
 IsModal
 	# Check if modal is open
 	Set Selenium Implicit Wait	1s	
-	${modal}	${value}=		Run Keyword And Ignore Error	Element Should Be Visible	xpath=//div[contains(@class,'modal')]
+	${modal}	${message}=		Run Keyword And Ignore Error	Element Should Be Visible	xpath=//div[contains(@class,'modal')]
 	#Page should Contain Element	xpath=//div[contains(@class,'modal')]
 	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
 	[return]	${modal}
@@ -122,8 +122,14 @@ Button
 	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
+ButtonXMLid    [Arguments]		${Model}    ${Name}
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${ButtonID}=		    get_button_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${ButtonID}               Button         model=${Model}  button_name=${ButtonID}
+
 ButtonWizard
-	[Arguments]	${model}=	${button_name}=	${class}=
+	[Arguments]	${model}=	${button_name}=	    ${class}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
 	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
 	ElementPostCheck
@@ -132,7 +138,7 @@ ButtonWizard
 Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
+	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 	
 Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
@@ -218,7 +224,7 @@ Select-Option	[Arguments]	${model}	${field}	${value}
 	#Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
 	ElementPostCheck
 
-Checkbox	[Arguments]	${model}	${field}
+Checkbox-Select	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	Click Element	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
 	ElementPostCheck

@@ -109,6 +109,9 @@ def get_id(URL, DBname, login, password, model, product_tmpl_id):
 
 def get_menu_res_id(URL, DBname, login, password, module, name):
     return get_res_id(URL, DBname, login, password, model= 'ir.ui.menu', module=module, name=name)
+
+def get_button_res_id(URL, DBname, login, password, module, name):
+    return get_res_id(URL, DBname, login, password, model='ir.actions.act_window', module=module, name=name)
 '''
 def create_db():
     return create_new_db("http://localhost:8069","admin","test_create_db",False,"admin")
