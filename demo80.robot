@@ -4,6 +4,8 @@ Documentation  Test of all elements in OpenERP
 Library        DatabaseLibrary
 Resource       odoo_8_0.robot
 
+Suite Setup      Run Keywords	Set Up
+
 *** Test Cases ***
 # make some checks in DB
 Check in DB

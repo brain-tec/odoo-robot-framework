@@ -10,6 +10,10 @@ Variables   ${CONFIG}
 
 
 *** Keywords ***
+Set Up
+    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    Set To Dictionary     ${ff default caps}    marionette=${True}
+
 ELS-Website-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
     Open Browser                        ${ODOO URL}  browser=${BROWSER}
     Maximize Browser Window

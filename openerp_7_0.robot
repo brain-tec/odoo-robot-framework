@@ -26,6 +26,9 @@ ${OPENERP DB}       odoo8_selenium
 
 
 *** Keywords ***
+Set Up
+    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    Set To Dictionary     ${ff default caps}    marionette=${True}
 
 Login    [Arguments]    ${user}    ${password}    ${db}=None
     Open Browser                        ${OPENERP URL}  browser=${BROWSER}
