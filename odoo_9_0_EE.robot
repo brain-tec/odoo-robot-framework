@@ -7,10 +7,14 @@ Documentation  Common keywords for OpenERP tests
 Library	    Selenium2Library
 Library  	String
 Library     connection_erp.py
+Library     Collections
 Variables   config_80.py
 
 
 *** Keywords ***
+Set Up
+    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    Set To Dictionary     ${ff default caps}    marionette=${True}
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}

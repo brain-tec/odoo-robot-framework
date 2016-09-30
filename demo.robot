@@ -3,6 +3,8 @@
 Documentation  Test of all elements in OpenERP
 Resource       openerp_7_0.robot
 
+Suite Setup      Run Keywords	Set Up
+
 *** Test Cases ***
 Valid Login
 	Login		admin	admin	demo
