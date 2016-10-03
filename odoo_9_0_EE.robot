@@ -13,8 +13,9 @@ Variables   config_80.py
 
 *** Keywords ***
 Set Up
-    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    Set To Dictionary     ${ff default caps}    marionette=${True}
+    ${ff default caps}=  Run Keyword if  ${Marionette}        Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    Run Keyword if  ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette On
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}
@@ -126,10 +127,10 @@ Button
 	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
-ButtonXMLid    [Arguments]		${Model}    ${Name}
+ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${ButtonID}=		    get_button_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${ButtonID}=		    get_button_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}  ${IR_MODEL_DATA_MODEL}  ${MODULE}	${NAME}
     Run Keyword If          ${ButtonID}               Button         model=${Model}  button_name=${ButtonID}
 
 ButtonWizard
