@@ -5,6 +5,7 @@ Documentation  Common keywords for OpenERP tests
 ...            is imported based on ${SUT} variable. SeleniumLibrary is also
 ...            imported here so that no other file needs to import it.
 Library        Selenium2Library
+Variables   ${CONFIG}
 
 *** Variables ***
 # Time defined in web/static/src/js/chrome.js till 
@@ -27,8 +28,10 @@ ${OPENERP DB}       odoo8_selenium
 
 *** Keywords ***
 Set Up
-    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    Set To Dictionary     ${ff default caps}    marionette=${True}
+#Uncomment the next 2 lines if you need to use Marionette
+    #${ff default caps}=       Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    # ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette Off
 
 Login    [Arguments]    ${user}    ${password}    ${db}=None
     Open Browser                        ${OPENERP URL}  browser=${BROWSER}

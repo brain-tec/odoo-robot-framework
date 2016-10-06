@@ -20,8 +20,10 @@ ${OPENERP PASSWORD}	admin
 
 *** Keywords ***
 Set Up
-    ${ff default caps}    Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    Set To Dictionary     ${ff default caps}    marionette=${True}
+#Uncomment the next 2 lines if you need to use Marionette
+    #${ff default caps}=       Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    # ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette Off
 
 Login
 #	Start Selenium Server

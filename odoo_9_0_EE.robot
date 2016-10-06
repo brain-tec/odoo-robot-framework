@@ -8,14 +8,15 @@ Library	    Selenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
-Variables   config_80.py
+Variables   ${CONFIG}
 
 
 *** Keywords ***
 Set Up
-    ${ff default caps}=  Run Keyword if  ${Marionette}        Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    Run Keyword if  ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
-    log to console   Marionette On
+#Uncomment the next 2 lines if you need to use Marionette
+    #${ff default caps}=       Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    # ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette Off
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}
