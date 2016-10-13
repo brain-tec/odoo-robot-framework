@@ -7,14 +7,24 @@ Documentation  Common keywords for OpenERP tests
 Library     Selenium2Library
 Library     String
 Variables   ${CONFIG}
+Library     XvfbRobot
 
 
 *** Keywords ***
 Set Up
-#Uncomment the next 2 lines if you need to use Marionette
-    #${ff default caps}=       Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    # ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
-    log to console   Marionette Off
+#ff default caps shoul be always present
+    ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+
+#marionette optional, just if we need it
+    #Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette off
+
+#acceptSslCerts should be used always
+    Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
+
+#Virtual display if we want the test to run in background
+    Start Virtual Display   1920    1080
+    log to console     Virtual Display On
 
 ELS-Website-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
     Open Browser                        ${ODOO URL}  browser=${BROWSER}
