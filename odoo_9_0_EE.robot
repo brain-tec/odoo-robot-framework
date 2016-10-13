@@ -8,15 +8,30 @@ Library	    Selenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
-Variables   ${CONFIG}
+Library     XvfbRobot
 
 
 *** Keywords ***
 Set Up
-#Uncomment the next 2 lines if you need to use Marionette
-    #${ff default caps}=       Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    # ${Marionette}     Set To Dictionary     ${ff default caps}    marionette=${True}
-    log to console   Marionette Off
+#ff default caps shoul be always present
+    ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+
+#marionette optional, just if we need it
+    #Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette off
+
+#acceptSslCerts should be used always
+    Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
+
+#Virtual display if we want the test to run in background
+    Start Virtual Display   1920    1080
+    log to console     Virtual Display On
+
+sidebaraction     [Arguments]	${action}
+    sleep   1s
+    Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/a
+    sleep   1s
+	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}
@@ -321,7 +336,7 @@ SidebarActionOld  [Arguments]	${type}	${id}
 	ClickLink   xpath=//div[contains(@class,'oe_view_manager_sidebar')]/div[not(contains(@style,'display: none'))]//div[contains(@class,'oe_sidebar')]//a[@data-bt-type='${type}' and @data-bt-id='${id}']
 	ElementPostCheck
 
-SidebarAction  [Arguments]	${type}	${index}
+old_SidebarAction  [Arguments]	${type}	${index}
 	# open the menu
 	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[@class='o_dropdown' and @data-bt-type='${type}']
 	# click on the menuentry
