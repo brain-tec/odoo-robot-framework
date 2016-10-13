@@ -24,8 +24,8 @@ Set Up
     Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
 
 #Virtual display if we want the test to run in background
-    #Start Virtual Display   1920    1080
-    log to console     Virtual Display Off
+    Start Virtual Display   1920    1080
+    log to console     Virtual Display On
 
 sidebaraction     [Arguments]	${action}
     sleep   1s
