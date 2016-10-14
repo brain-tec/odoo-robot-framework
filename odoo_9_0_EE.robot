@@ -8,7 +8,7 @@ Library	    Selenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
-Library     XvfbRobot
+#Library     XvfbRobot
 
 
 *** Keywords ***
@@ -24,7 +24,7 @@ Set Up
     Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
 
 #Virtual display if we want the test to run in background
-    Start Virtual Display   1920    1080
+    #Start Virtual Display   1920    1080
     log to console     Virtual Display On
 
 sidebaraction     [Arguments]	${action}
