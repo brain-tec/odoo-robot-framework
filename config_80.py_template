@@ -17,4 +17,8 @@ ODOO_URL = "http://" + SERVER + ":" + PORT
 ODOO_DB = "demo"
 USER = "admin"
 PASSWORD = "admin"
+ODOO_DB_USER = "odoo"
+ODOO_DB_PASSWORD = "odoo"
+ODOO_DB_PORT = "5432"
+ODOO_DB = "openerp_test"
 
