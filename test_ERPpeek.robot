@@ -11,7 +11,7 @@ Library      connection_erp.py
 Drop DB
 	${drop}=	Drop Db	http://localhost:8069	admin	${ODOO_DB}
 	log to console	${drop}
-Create db
+*Create db*
 	sleep	10s
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
 	${created}=	Create New Db	http://localhost:8069	admin	${ODOO_DB}	True	admin   de_DE
