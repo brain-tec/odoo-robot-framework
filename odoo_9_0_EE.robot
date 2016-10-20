@@ -13,7 +13,9 @@ Library     Collections
 
 *** Keywords ***
 Set Up
-#ff default caps shoul be always present
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
+
+#ff default caps shoul be always presented
     ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
 
 #marionette optional, just if we need it

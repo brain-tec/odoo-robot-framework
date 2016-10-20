@@ -8,14 +8,15 @@
 ##############################################################################
 import logging
 logger = logging.getLogger(__name__)
+__version__ = '1.6.3'
 
 try:
     import erppeek
 except:
-    print "Please install sudo pip install -U erppeek"
+    logger.warning("Please install sudo pip install -U erppeek")
 
-def create_new_db(URL, password, name, demo = False, user_password='admin', lang='en_US'):
-    connection = erppeek.Client(URL)
+def create_new_db(server, password, name, demo = False, user_password='admin', lang='en_US'):
+    connection = erppeek.Client(server)
     if demo == "True" or demo == "u'True" or demo==True:
         demo = True
     else:
@@ -27,8 +28,8 @@ def create_new_db(URL, password, name, demo = False, user_password='admin', lang
     return False
 
 
-def drop_db(URL, password, name):
-    connection = erppeek.Client(URL)
+def drop_db(server, password, name):
+    connection = erppeek.Client(server)
     echo = "fail"
     try:
         connection.db.drop(password, name)
@@ -36,8 +37,8 @@ def drop_db(URL, password, name):
         return echo
 
 
-def install_module(URL, DBname, password, module):
-    connection = erppeek.Client(URL, db=DBname, user="admin",
+def install_module(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
                                 verbose=False)
     connection.install(module)
@@ -47,8 +48,8 @@ def install_module(URL, DBname, password, module):
     return False
 
 
-def uninstall_module(URL, DBname, password, module):
-    connection = erppeek.Client(URL, db=DBname, user="admin",
+def uninstall_module(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
                                 verbose=False)
     connection.uninstall(module)
@@ -58,9 +59,9 @@ def uninstall_module(URL, DBname, password, module):
     return False
 
 
-def get_res_id(URL, DBname, login, password, model, module, name):
-    connection = erppeek.Client(URL, DBname,
-                                login, password, transport=None, verbose=False)
+def get_res_id(server, db, user, password, model, module, name):
+    connection = erppeek.Client(server, db,
+                                user, password, transport=None, verbose=False)
     ir_model_data = connection.model("ir.model.data")
     ir_model_obj = ir_model_data.search([('model', '=', model),
                                          ('module', '=', module),
@@ -73,9 +74,9 @@ def get_res_id(URL, DBname, login, password, model, module, name):
     return ir_model_obj['res_id']
 
 
-def get_module_name(URL, DBname, login, password, res_id):
-    connection = erppeek.Client(URL, DBname,
-                                login, password,
+def get_module_name(server, db, user, password, res_id):
+    connection = erppeek.Client(server, db,
+                                user, password,
                                 transport=None, verbose=False)
     ir_model_data = connection.model("ir.model.data")
     ir_model_obj = ir_model_data.search([('model', '=', 'ir.ui.menu'),
@@ -87,9 +88,9 @@ def get_module_name(URL, DBname, login, password, res_id):
     return ir_model_obj_module['module'], ir_model_obj_name['name']
 
 
-def get_stock(URL, DBname, login, password, model, product_id):
-    connection = erppeek.Client(URL, DBname,
-                                login, password, transport=None, verbose=False)
+def get_stock(server, db, user, password, model, product_id):
+    connection = erppeek.Client(server, db,
+                                user, password, transport=None, verbose=False)
     stock = connection.model(model)
     stock_obj = stock.search([('product_id', '=', int(product_id))])
     if not stock_obj:
@@ -105,11 +106,11 @@ def get_stock(URL, DBname, login, password, model, product_id):
     return returnValue
 
 
-def get_stock_move(URL, DBname,
-                   login, password,
+def get_stock_move(server, db,
+                   user, password,
                    model, product_id, variable_name, variable):
-    connection = erppeek.Client(URL, DBname,
-                                login, password,
+    connection = erppeek.Client(server, db,
+                                user, password,
                                 transport=None, verbose=False)
     stock_move = connection.model("stock.move")
     stock_move_obj = stock_move.search([('product_id', '=', product_id),
@@ -127,9 +128,9 @@ def get_stock_move(URL, DBname,
     return returnValue
 
 
-def get_desired_data(URL, DBname, login, password, name, model, desired):
-    connection = erppeek.Client(URL, DBname,
-                                login, password,
+def get_desired_data(server, db, user, password, name, model, desired):
+    connection = erppeek.Client(server, db,
+                                user, password,
                                 transport=None, verbose=False)
     Element = connection.model(model)
     Element_name = Element.search([('name', '=', name)])
@@ -143,9 +144,9 @@ def get_desired_data(URL, DBname, login, password, name, model, desired):
     return Element_data[desired]
 
 
-def get_id(URL, DBname, login, password, model, product_tmpl_id):
-    connection = erppeek.Client(URL, DBname,
-                                login, password,
+def get_id(server, db, user, password, model, product_tmpl_id):
+    connection = erppeek.Client(server, db,
+                                user, password,
                                 transport=None, verbose=False)
     product_product = connection.model(model)
     product_product_obj = product_product.search([("product_tmpl_id",
@@ -159,15 +160,15 @@ def get_id(URL, DBname, login, password, model, product_tmpl_id):
     return product_product_id['id']
 
 
-def get_menu_res_id(URL, DBname, login, password, module, name):
-    return get_res_id(URL, DBname,
-		      login, password,
+def get_menu_res_id(server, db, user, password, module, name):
+    return get_res_id(server, db,
+		      user, password,
 		      model= 'ir.ui.menu', module=module, name=name)
 
 
-def get_button_res_id(URL, DBname, login, password, model, module, name):
-    return get_res_id(URL, DBname, 
-		      login, password,
+def get_button_res_id(server, db, user, password, model, module, name):
+    return get_res_id(server, db, 
+		      user, password,
 		      model=model, module=module, name=name)
 '''
 def create_db():
@@ -180,3 +181,15 @@ def install():
 
 #    get_menu_res_id('http://localhost:8069',
 # 'test_create_db', 'admin', 'admin', 'base', 'menu_administration')
+
+import sys
+if __name__ == "__main__":
+    print "Try connection"
+    connection = erppeek.Client(server="http://localhost:12004", db="34529-399-861d2c-all",
+                                user="admin", password="admin", verbose=True
+                                )
+    print "Get model"
+    Element = connection.model('res.users')
+    Element_name = Element.search([('id', '=', 1)])
+    print "Found"
+
