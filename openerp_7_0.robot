@@ -21,8 +21,8 @@ ${SELENIUM DELAY}   0
 ${SELENIUM TIMEOUT}   20
 ${BROWSER}      ff
 ${SERVER}       localhost
-${PORT}         8069
-${OPENERP URL}      http://${SERVER}:${PORT}
+${ODOO_PORT}        8069
+${OPENERP URL}      http://${SERVER}:${ODOO_PORT}
 ${OPENERP DB}       odoo8_selenium
 
 
