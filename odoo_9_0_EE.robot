@@ -44,7 +44,7 @@ Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
 	Click element   //a[@href="/web/login"]
-	Wait Until Page Contains Element	name=login
+	Wait Until Element is Visible	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
