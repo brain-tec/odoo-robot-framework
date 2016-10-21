@@ -13,7 +13,7 @@ Marionette= True
 # Odoo
 SERVER = "localhost"
 ODOO_PORT = "8069"
-ODOO_URL = "http://" + SERVER + ":" + PORT
+ODOO_URL = "http://" + SERVER + ":" + ODOO_PORT
 ODOO_DB = "demo"
 USER = "admin"
 PASSWORD = "admin"
