@@ -11,8 +11,8 @@ Library        SeleniumLibrary
 ${SELENIUM DELAY}	0.5
 ${BROWSER}			ff
 ${SERVER}			localhost
-${PORT}				8069
-${OPENERP URL}		http://${SERVER}:${PORT}/web/webclient/home
+${ODOO_PORT}				8069
+${OPENERP URL}		http://${SERVER}:${ODOO_PORT}/web/webclient/home
 ${OPENERP DB}		DEMO
 ${OPENERP USERNAME}	admin
 ${OPENERP PASSWORD}	admin
