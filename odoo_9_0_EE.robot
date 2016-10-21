@@ -75,19 +75,19 @@ SubSubMenu	[Arguments]	${menu}
 SubMenuXMLid    [Arguments]		${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
    
 MainMenuXMLid    [Arguments]    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
     
 SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID}
 
 
@@ -148,7 +148,7 @@ Button
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${ButtonID}=		    get_button_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}  ${IR_MODEL_DATA_MODEL}  ${MODULE}	${NAME}
+    ${ButtonID}=		    get_button_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}  ${IR_MODEL_DATA_MODEL}  ${MODULE}	${NAME}
     Run Keyword If          ${ButtonID}               Button         model=${Model}  button_name=${ButtonID}
 
 ButtonWizard
