@@ -128,7 +128,7 @@ def get_stock_move(server, db,
     return returnValue
 
 
-def get_desired_data(server, db, user, password, name, model, desired):
+def browse(server, db, user, password, name, model, desired):
     connection = erppeek.Client(server, db,
                                 user, password,
                                 transport=None, verbose=False)
