@@ -20,10 +20,10 @@ def create_new_db(server, password, name, demo = False, user_password='admin', l
     if demo == "True" or demo == "u'True" or demo==True:
         demo = True
     else:
-        demo=False
+        demo = False
 
-    db = connection.create_database (password, name, demo ,lang,user_password=user_password)
-    if db==1:
+    db = connection.create_database (password, name, demo, lang, user_password=user_password)
+    if db == 1:
         return True
     return False
 

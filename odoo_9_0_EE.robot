@@ -11,23 +11,19 @@ Library     Collections
 #Library     XvfbRobot
 
 
+
 *** Keywords ***
 Set Up
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 
-#ff default caps shoul be always presented
+    #ff default caps shoul be always presented
     ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-
-#marionette optional, just if we need it
+    #marionette optional, just if we need it
     #Set To Dictionary     ${ff default caps}    marionette=${True}
-    log to console   Marionette off
 
-#acceptSslCerts should be used always
-    Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
 
-#Virtual display if we want the test to run in background
+    #Virtual display if we want the test to run in background
     #Start Virtual Display   1920    1080
-    log to console     Virtual Display On
 
 sidebaraction     [Arguments]	${action}
     sleep   1s
@@ -36,19 +32,27 @@ sidebaraction     [Arguments]	${action}
 	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
-	Open Browser	${ODOO URL}  browser=${BROWSER}
+	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
 	Maximize Browser Window
-	Go To                           ${ODOO URL}/web/database/selector
+	Go To                           ${ODOO_URL_DB}/web/database/selector
 	Set Selenium Speed	            ${SELENIUM_DELAY}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
-	Click element   //a[@href="/web/login"]
+	Run Keyword and Ignore error    Click element   //a[@href="/web/login"]
 	Wait Until Element is Visible	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
 	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
+
+# checked: 9.0 ok
+DatabaseConnect    [Arguments]    ${odoo_db}=${ODOO_DB}    ${odoo_db_user}=${ODOO_DB_USER}    ${odoo_db_password}=${ODOO_DB_PASSWORD}    ${odoo_db_server}=${SERVER}    ${odoo_db_port}=${ODOO_DB_PORT}
+		Connect To Database Using Custom Params	psycopg2        database='${odoo_db}',user='${odoo_db_user}',password='${odoo_db_password}',host='${odoo_db_server}',port=${odoo_db_port}
+
+# checked: 9.0 ok
+DatabaseDisconnect
+		Disconnect from Database
 
 # ok: 90EE
 BackToMainMenu
@@ -77,18 +81,21 @@ SubMenuXMLid    [Arguments]		${Name}
     ${NAME}=                Fetch From Right           ${Name}              .
     ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
+    Run Keyword Unless      ${SubMenuID}        Fail    ERROR: Module or Name not correct
    
 MainMenuXMLid    [Arguments]    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
+    Run Keyword Unless      ${MainMenuID}        Fail    ERROR: Module or Name not correct
     
 SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID}
+    Run Keyword Unless      ${SubSubMenuID}        Fail    ERROR: Module or Name not correct
 
 
 # checked: 9.0 ok
@@ -183,7 +190,9 @@ Many2One-External	[Arguments]	${model}	${field}
 
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    sleep   1s
+	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
@@ -268,7 +277,7 @@ NotebookPage	[Arguments]	${string}
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
-	Click Link	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
+	Click element	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
 	ElementPostCheck
 
 One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
