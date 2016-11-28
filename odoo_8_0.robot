@@ -13,38 +13,21 @@ Library     XvfbRobot
 *** Keywords ***
 Set Up
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
-#ff default caps shoul be always present
-    ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
 
-#marionette optional, just if we need it
+    #ff default caps shoul be always present
+    #${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    #marionette optional, just if we need it
     #Set To Dictionary     ${ff default caps}    marionette=${True}
-    log to console   Marionette off
 
-#acceptSslCerts should be used always
-    Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
-
-#Virtual display if we want the test to run in background
-    Start Virtual Display   1920    1080
-    log to console     Virtual Display On
-
-ELS-Website-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
-    Open Browser                        ${ODOO URL}  browser=${BROWSER}
-    Maximize Browser Window
-    Go To                               ${ODOO URL}
-    Set Selenium Speed                  ${SELENIUM_DELAY}
-    Set Selenium Timeout                ${SELENIUM_TIMEOUT}
-    Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
-    Wait Until Page Contains Element    name=login
-    Input Text                          name=login  ${user}
-    Input Password                      name=password   ${password}
-    Click Button                        xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
-    Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_website_sale')]
+    #Virtual display if we want the test to run in background
+    #Start Virtual Display   1920    1080
 
 # checked: 8.0 ok
-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
-    Open Browser                        ${ODOO URL}  browser=${BROWSER}
+Login    [Arguments]    ${user}=${USER}    ${password}=${PASSWORD}    ${db}=${ODOO_DB}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_8_PORT}
+    Open Browser                        ${ODOO_URL_DB}  browser=${BROWSER}
     Maximize Browser Window
-    Go To                               ${ODOO URL}
+    Go To                               ${ODOO_URL_DB}
     Set Selenium Speed                  ${SELENIUM_DELAY}
     Set Selenium Timeout                ${SELENIUM_TIMEOUT}
     Set Selenium Implicit Wait          ${SELENIUM_TIMEOUT}
@@ -78,14 +61,16 @@ SubMenu    [Arguments]    ${menu}
 SubMenuXMLid    [Arguments]		${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
+    Run Keyword Unless          ${SubMenuID}        Fail    ERROR: Module or Name not correct
    
 MainMenuXMLid    [Arguments]    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
+    Run Keyword Unless          ${MainMenuID}       Fail    ERROR: Module or Name not correct
 
 
 # checked: 8.0 ok
@@ -115,7 +100,15 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
     Input Text              xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']    ${value}
 
 # checked: 8.0 ok
-Button                      [Arguments]     ${model}    ${button_name}
+Button     [Arguments]   ${model}=	${button_name}=	${class}=
+	#Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_pager_value')]
+	Run Keyword Unless	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+	Run Keyword Unless	'${model}' == ''	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+	Run Keyword If	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@class='${class}']
+	Run Keyword If	'${model}' == ''	Click Button	xpath=//button[@class='${class}']
+	ElementPostCheck
+
+Other button     [Arguments]     ${model}    ${button_name}
      Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_pager_value')]
      Click Button           xpath=//div[contains(@class,'openerp')][last()]//*[not(contains(@style,'display:none'))]//button[@data-bt-testing-name='${button_name}']
      Wait For Condition     return true;    20.0
@@ -130,8 +123,10 @@ Many2OneSelect    [Arguments]    ${model}    ${field}    ${value}
     ElementPostCheck
 
 Date    [Arguments]    ${model}    ${field}    ${value}
-    ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-    Input Text             xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+    Click Element        xpath=//div[contains(@class,'openerp')][last()]//img[ancestor::span[descendant::input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']] and @class="oe_input_icon oe_datepicker_trigger"]
+    sleep   1s
+    Click Element        xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+    Input Text           xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
     ElementPostCheck
 
 Char    [Arguments]    ${model}    ${field}    ${value}
@@ -262,3 +257,10 @@ MainWindowMany2One          [Arguments]     ${field}    ${value}
     Click Link              xpath=//ul[contains(@class, 'ui-autocomplete') and not(contains(@style, 'display: none'))]//a[self::*/text()='${value}']    don't wait
     ElementPostCheck
     
+new date        [Arguments]    ${model}    ${field}     ${day}   ${month}    ${year}
+    Click Element        xpath=//div[contains(@class,'openerp')][last()]//img[ancestor::span[descendant::input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']] and @class="oe_input_icon oe_datepicker_trigger"]
+    ${month}=   Evaluate        str(${month}-${1})
+    select from list by value       //select[@class="ui-datepicker-month"]  ${month}
+    select from list by value       //select[@class="ui-datepicker-year"]  ${year}
+    click element           //table[@class="ui-datepicker-calendar"]//a[.='${day}']
+    ElementPostCheck
