@@ -32,7 +32,7 @@ sidebaraction     [Arguments]	${action}
 	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_8_PORT}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
 	Maximize Browser Window
 	Go To                           ${ODOO_URL_DB}/web/database/selector
