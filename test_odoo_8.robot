@@ -10,7 +10,7 @@ Library        connection_erp.py
 
 *** Test Cases ***
 Create Variables
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_8_PORT}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
     ${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin    260
 	log to console	 ${module}
 	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	68
