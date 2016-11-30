@@ -40,7 +40,7 @@ Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
-	Run Keyword and Ignore error    Click element   //a[@href="/web/login"]
+	#Run Keyword and Ignore error    Click element   //a[@href="/web/login"]
 	Wait Until Element is Visible	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
@@ -149,8 +149,8 @@ Radio	[Arguments]	${model}	${field}	${value}
 Button
 	[Arguments]	${model}=	${button_name}=	${class}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
-	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
-	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
+	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}'][last()]
 	ElementPostCheck
 
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
@@ -168,7 +168,13 @@ ButtonWizard
 # ok: 90EE ok (Mainpage)
 Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Input Text	xpath=(//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}'])[last()]	value=${value}
+	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
+	ElementPostCheck
+
+SecondMany2OneSelect	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Modal	Input Text	xpath=//input[@data-bt-testing-name='${field}']	value=${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 	
@@ -253,9 +259,9 @@ X2Many-Text	[Arguments]	${model}	${field}	${value}
 
 Select-Option	[Arguments]	${model}	${field}	${value}	
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	#Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
-	#Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
+	Select From List By Value   	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 	ElementPostCheck
 
 X2Many-Selection [Arguments] ${model} ${field} ${value}
@@ -278,7 +284,7 @@ NotebookPage	[Arguments]	${string}
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
-	Click element	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
+	Click element	xpath=(//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a)[last()]
 	ElementPostCheck
 
 One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
