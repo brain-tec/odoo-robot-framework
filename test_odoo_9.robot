@@ -18,11 +18,11 @@ Create Variables
 	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	186
 	log to console	 ${module}
 Drop DB
-	#${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
+	${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
 	log to console	${drop}
 Create db
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
-	#${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_EN
+	${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_EN
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
 Install sales
@@ -72,7 +72,7 @@ Confirm SO
 	Button	model=sale.order	button_name=action_confirm
 Create Invoice
 	Button	model=sale.order	button_name=246
-	Radio	sale.advance.payment.inv	advance_payment_method	Invoiceable lines
+	Radio	sale.advance.payment.inv	advance_payment_method	all
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
 	Button	model=account.invoice	button_name=invoice_open
 	Button	model=account.invoice	button_name=invoice_pay_customer
