@@ -55,24 +55,28 @@ Create Quotation
 	NewOne2Many    sale.order	order_line
 	X2Many-Many2OneSelect	sale.order.line	  product_id	ipad mini
 second order line
-	sleep   5s
 	NewOne2Many    sale.order	order_line
-	Many2OneSelect	sale.order.line	  product_id    iMac
+	SecondMany2OneSelect	sale.order.line	  product_id    iMac
+Third Order Line
+	NewOne2Many    sale.order	order_line
+	SecondMany2OneSelect	sale.order.line	  product_id    iPod
 	NotebookPage    Other Information
 	Char	sale.order	client_order_ref	Hello Test
-Save and cancel Quotation
+Save Quotation
 	Button	model=sale.order	button_name=oe_form_button_save
+and cancel
 	Button	model=sale.order	button_name=action_cancel
-Confirm SO
+Quotation
 	Button	model=sale.order	button_name=action_draft
+Confirm SO
 	Button	model=sale.order	button_name=action_confirm
 Create Invoice
 	Button	model=sale.order	button_name=246
-	Select-Option	sale.advance.payment.inv	advance_payment_method	"all"
+	Radio	sale.advance.payment.inv	advance_payment_method	all
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
 	Button	model=account.invoice	button_name=invoice_open
 	Button	model=account.invoice	button_name=invoice_pay_customer
 	Select-Option	account.voucher	journal_id	17
 	Button	model=account.voucher	button_name=button_proforma_voucher
 close
-    close browser
+    #close browser
