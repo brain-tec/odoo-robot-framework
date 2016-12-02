@@ -20,7 +20,7 @@ Drop DB
 	log to console	${drop}
 Create db
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
-	${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_EN
+	${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	${True}	admin   en_EN
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
 Install sales

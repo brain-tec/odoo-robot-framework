@@ -171,12 +171,6 @@ Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=(//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}'])[last()]	value=${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
-
-SecondMany2OneSelect	[Arguments]	${model}	${field}	${value}
-	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[@data-bt-testing-name='${field}']	value=${value}
-	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
-	ElementPostCheck
 	
 Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
