@@ -79,4 +79,4 @@ Create Invoice
 	Select-Option	account.voucher	journal_id	17
 	Button	model=account.voucher	button_name=button_proforma_voucher
 close
-    #close browser
+    close browser
