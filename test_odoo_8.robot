@@ -44,28 +44,46 @@ Test SelectListView
 Create Quotation
     MainMenuXMLid    base.menu_base_partner
 	SubMenuXMLid    sale.menu_sale_quotations
+	sleep   2s
+	Button	model=sale.order	button_name=oe_list_add
+	Many2OneSelect    sale.order	partner_id	Agrolait
+	Date	sale.order	date_order	12/21/2017 10:35:00
+	Char	sale.order	client_order_ref	Hello Test
+Order line
+	NewOne2Many    sale.order	order_line
+	sleep   1s
+	Many2OneSelect    sale.order.line	product_id  iPod
+Second Order Line
+	NewOne2Many    sale.order	order_line
+	Many2OneSelect    sale.order.line	product_id	iMac
+	NotebookPage    Other Information
+Save and cancel Quotation
+	Button	model=sale.order	button_name=oe_form_button_save
+	Button	model=sale.order	button_name=cancel
+Quotation
+    MainMenuXMLid    base.menu_base_partner
+	SubMenuXMLid    sale.menu_sale_quotations
+	sleep   2s
 	Button	model=sale.order	button_name=oe_list_add
 	Many2OneSelect    sale.order	partner_id	Agrolait
 	Date	sale.order	date_order	12/21/2017 10:35:00
 	Char	sale.order	client_order_ref	Hello Test
 	NewOne2Many    sale.order	order_line
-	Many2OneSelect    sale.order.line	product_id	mac
+	sleep   1s
+	Many2OneSelect    sale.order.line	product_id  iPod
 	NewOne2Many    sale.order	order_line
-	Many2OneSelect    sale.order.line	product_id	[A1090] iMac
+	Many2OneSelect    sale.order.line	product_id	iMac
 	NotebookPage    Other Information
-Save and cancel Quotation
-	Button	model=sale.order	button_name=oe_form_button_save
-	Button	model=sale.order	button_name=cancel
+    Button	model=sale.order	button_name=oe_form_button_save
 Confirm SO
-	Button	model=sale.order	button_name=copy_quotation
 	Button	model=sale.order	button_name=action_button_confirm
 Create Invoice
-	Button	model=sale.order	button_name=356
-	Select-Option	sale.advance.payment.inv	advance_payment_method	"all"
+	Button	model=sale.order	button_name=307
+	#Select-Option	sale.advance.payment.inv	advance_payment_method	"all"
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
 	Button	model=account.invoice	button_name=invoice_open
 	Button	model=account.invoice	button_name=invoice_pay_customer
-	Select-Option	account.voucher	journal_id	17
+	Select-Option	account.voucher	journal_id	Cash Journal - (test) (EUR)
 	Button	model=account.voucher	button_name=button_proforma_voucher
 close
     close browser
