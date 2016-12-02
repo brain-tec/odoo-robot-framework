@@ -56,10 +56,10 @@ Create Quotation
 	X2Many-Many2OneSelect	sale.order.line	  product_id	ipad mini
 second order line
 	NewOne2Many    sale.order	order_line
-	SecondMany2OneSelect	sale.order.line	  product_id    iMac
+	X2Many-Many2OneSelect	sale.order.line	  product_id    iMac
 Third Order Line
 	NewOne2Many    sale.order	order_line
-	SecondMany2OneSelect	sale.order.line	  product_id    iPod
+	X2Many-Many2OneSelect	sale.order.line	  product_id    iPod
 	NotebookPage    Other Information
 	Char	sale.order	client_order_ref	Hello Test
 Save Quotation
