@@ -99,6 +99,7 @@ Quotation
     Button	model=sale.order	button_name=oe_form_button_save
 Confirm SO
 	Button	model=sale.order	button_name=action_button_confirm
+	sleep   3s
 Create Invoice
 	Button	class=oe_button oe_form_button oe_highlight
 	#Select-Option	sale.advance.payment.inv	advance_payment_method	"all"
