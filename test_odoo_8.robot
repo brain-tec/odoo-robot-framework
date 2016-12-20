@@ -100,7 +100,7 @@ Quotation
 Confirm SO
 	Button	model=sale.order	button_name=action_button_confirm
 Create Invoice
-	Button	model=sale.order	button_name=307
+	Button	class=oe_button oe_form_button oe_highlight
 	#Select-Option	sale.advance.payment.inv	advance_payment_method	"all"
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
 	Button	model=account.invoice	button_name=invoice_open
