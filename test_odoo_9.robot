@@ -13,7 +13,7 @@ Create Variables
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
     ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
     Set To Dictionary     ${ff default caps}    marionette=${True}
-    ${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin    67
+    ${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin    99
 	log to console	 ${module}
 	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	186
 	log to console	 ${module}
@@ -38,7 +38,33 @@ Install web Selenium
 Valid Login
 	Login     user=admin    password=admin
 	sleep   1s
+Create new User
+    MainMenuXMLid    mail.menu_contacts
+    sleep   3s
+	Button	class=btn btn-primary btn-sm o-kanban-button-new
+	Char	res.partner	name	New customer
+	Many2OneSelect    res.partner	parent_id	Agrolait
+Partner Address
+	Button	model=res.partner	button_name=open_parent
+	Char	res.partner	street	69 street
+	Char	res.partner	city	London
+	Many2OneSelect	res.partner	state_id	California
+	Many2OneSelect	res.partner	country_id	United Kingdom
+Contact phone
+    Button	model=res.partner	button_name=oe_form_button_save
+    Button	class=close
+	Char	res.partner	phone	4568275555
+	Char	res.partner	mobile	5555346783
+Text partner
+	Text	res.partner	comment	internal note
+	#NotebookPage    Sales & Purchases
+Other data
+	Many2OneSelect    res.partner	user_id	Administrator
+	Checkbox-Select	res.partner	supplier
+save Partner
+	Button	model=res.partner	button_name=oe_form_button_save
 Test SelectListView
+    BackToMainMenu
 	MainMenuXMLid    base.menu_base_partner
 	sleep   2s
 	SubMenuXMLid    base.menu_sales
