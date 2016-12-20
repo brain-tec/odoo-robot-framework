@@ -168,7 +168,7 @@ ButtonWizard
 # ok: 90EE ok (Mainpage)
 Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=(//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}'])[last()]	value=${value}
+	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 	
@@ -237,7 +237,7 @@ FloatWizard	[Arguments]	${model}	${field}	${value}
 
 Text	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 	
 TextWizard	[Arguments]	${model}	${field}	${value}

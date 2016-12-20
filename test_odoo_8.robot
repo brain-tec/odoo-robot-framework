@@ -13,7 +13,7 @@ Create Variables
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
     ${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin    260
 	log to console	 ${module}
-	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	68
+	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	74
 	log to console	 ${module}
 Drop DB
 	${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
@@ -28,6 +28,7 @@ Install sales
 	${module_installed}=	Install Module	${ODOO_URL_DB}	${ODOO_DB}	admin	sale
 	log to console	${module_installed}
 	Run Keyword Unless	${module_installed}	Fail
+
 Install web Selenium
 	#url, DB_name, db_pw, module_name
 	${module_installed}=	Install Module	${ODOO_URL_DB}	${ODOO_DB}	admin	web_selenium
@@ -35,6 +36,27 @@ Install web Selenium
 	Run Keyword Unless	${module_installed}	Fail
 Valid Login
 	Login     user=admin    password=admin
+Create new User
+    MainMenuXMLid    base.menu_base_partner
+    SubMenuXMLid    base.menu_partner_form
+    sleep   2s
+	Button	class=oe_kanban_button_new oe_highlight
+	Char	res.partner	name	New customer
+	Many2OneSelect    res.partner	parent_id	Agrolait
+	Checkbox-Select	res.partner	use_parent_address
+	Checkbox-Select	res.partner	use_parent_address
+	Char	res.partner	street	69 street
+	Char	res.partner	city	London
+	Many2OneSelect    res.partner	state_id	California
+	Many2OneSelect    res.partner	country_id	United Kingdom
+	Char	res.partner	phone	4568275555
+	Char	res.partner	mobile	5555346783
+	Text	res.partner	comment	internal note
+	#NotebookPage    Sales & Purchases
+	Many2OneSelect    res.partner	user_id	Administrator
+	Date	res.partner	date	09.09.1909
+	Checkbox-Select	res.partner	supplier
+	Button	model=res.partner	button_name=oe_form_button_save
 Test SelectListView
 	MainMenuXMLid    base.menu_base_partner
 	SubMenuXMLid    sale.menu_sale_quotations
@@ -52,10 +74,10 @@ Create Quotation
 Order line
 	NewOne2Many    sale.order	order_line
 	sleep   1s
-	Many2OneSelect    sale.order.line	product_id  iPod
+	X2Many-Many2OneSelect    sale.order.line	product_id  iPod
 Second Order Line
 	NewOne2Many    sale.order	order_line
-	Many2OneSelect    sale.order.line	product_id	iMac
+	X2Many-Many2OneSelect    sale.order.line	product_id	iMac
 	NotebookPage    Other Information
 Save and cancel Quotation
 	Button	model=sale.order	button_name=oe_form_button_save
@@ -70,9 +92,9 @@ Quotation
 	Char	sale.order	client_order_ref	Hello Test
 	NewOne2Many    sale.order	order_line
 	sleep   1s
-	Many2OneSelect    sale.order.line	product_id  iPod
+	X2Many-Many2OneSelect    sale.order.line	product_id  iPod
 	NewOne2Many    sale.order	order_line
-	Many2OneSelect    sale.order.line	product_id	iMac
+	X2Many-Many2OneSelect    sale.order.line	product_id	iMac
 	NotebookPage    Other Information
     Button	model=sale.order	button_name=oe_form_button_save
 Confirm SO
@@ -85,5 +107,6 @@ Create Invoice
 	Button	model=account.invoice	button_name=invoice_pay_customer
 	Select-Option	account.voucher	journal_id	Cash Journal - (test) (EUR)
 	Button	model=account.voucher	button_name=button_proforma_voucher
+
 close
     close browser
