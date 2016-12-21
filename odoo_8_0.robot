@@ -102,9 +102,12 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 # checked: 8.0 ok
 Button     [Arguments]   ${model}=	${button_name}=	${class}=
 	#Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_pager_value')]
+	Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]	2 min
 	Run Keyword Unless	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+	Run Keyword Unless	'${model}' == ''	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
 	Run Keyword Unless	'${model}' == ''	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
 	Run Keyword If	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@class='${class}']
+	Run Keyword If	'${model}' == ''	Focus	xpath=//button[@class='${class}']
 	Run Keyword If	'${model}' == ''	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
