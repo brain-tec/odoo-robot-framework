@@ -149,7 +149,9 @@ Radio	[Arguments]	${model}	${field}	${value}
 Button
 	[Arguments]	${model}=	${button_name}=	${class}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
+	Run Keyword Unless	'${model}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
 	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword If	'${model}' == ''	Modal	Focus	xpath=//button[@class='${class}'][last()]
 	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}'][last()]
 	ElementPostCheck
 
