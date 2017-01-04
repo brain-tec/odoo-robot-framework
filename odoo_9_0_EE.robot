@@ -13,9 +13,6 @@ Library     Collections
 
 
 *** Keywords ***
-
-
-
 Set Up
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 
@@ -220,27 +217,8 @@ Date	[Arguments]	${model}	${field}	${value}
 	#run keyword if      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
 	#run keyword Unless      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${oDay}"]
 
-
 Clear text  [Arguments]	${model}	${field}
     Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-
-DateComplete	[Arguments]	${model}	${field}	${value}
-	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Focus         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-	${date}=    get value   xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	log to console  date=${date}
-	Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	${date}=    get value   xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	log to console  date=${date}
-	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
-	${date}=    get value   xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	log to console  date=${date}
-	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-	Focus          xpath=//div[@class="datepicker"]//td[@class='day active']
-	Click Element          xpath=//div[@class="datepicker"]//td[@class='day active']
-	${date}=    get value   xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	log to console  date=${date}
-	ElementPostCheck
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
