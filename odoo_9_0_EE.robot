@@ -34,8 +34,10 @@ sidebaraction     [Arguments]	${action}
     sleep   1s
 	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
 # checked: 9.0 ok
-Login	[Arguments]	${user}=${ODOO_USER}	${password}=${ODOO_PASSWORD}	${db}=${ODOO_DB}
-	Open Browser	${ODOO_URL}  browser=${BROWSER}
+Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
+	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
+
 	Maximize Browser Window
 	Go To                           ${ODOO_URL}
 	Set Selenium Speed	            ${SELENIUM_DELAY}
@@ -140,8 +142,10 @@ Radio	[Arguments]	${model}	${field}	${value}
 Button
 	[Arguments]	${model}=	${button_name}=	${class}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
-	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
-	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
+	Run Keyword Unless	'${model}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword If	'${model}' == ''	Modal	Focus	xpath=//button[@class='${class}'][last()]
+	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}'][last()]
 	ElementPostCheck
 
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
@@ -175,14 +179,39 @@ X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
+Input letters   [Arguments]    ${locator}    ${text}
+#input text letter by letter
+        ${items}    Get Length    ${text}
+        : FOR    ${item}    IN RANGE    ${items}
+        \    Press Key    ${locator}    ${text[${item}]}
+
+
 # The blue arrow on the right side of a many2one
 Many2One-External	[Arguments]	${model}	${field}
 	Modal	Click Button	xpath=//div[contains(@class,'o_form_field_many2one') and .//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//button[contains(@class,'o_external_button')]
 
+get day     [Arguments]    ${date}
+    ${day}=    return_day  ${date}
+	log to console   ${day}
+	[return]     ${day}
+
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	ElementPostCheck
+	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
+	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	Click Element          xpath=(//div[@class="datepicker"]//td[@class='day'])[last()]
+    Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    ${day}=     get day  ${value}
+    #${day}=     fetch from Left   ${value}  .
+    #${oDay}=    fetch from right    ${day}  0
+    log to console  day=${day}
+    Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
+    #log to console  oDay=${oDay}
+	#run keyword if      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
+	#run keyword Unless      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${oDay}"]
+
+Clear text  [Arguments]	${model}	${field}
+    Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
@@ -225,7 +254,7 @@ FloatWizard	[Arguments]	${model}	${field}	${value}
 
 Text	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
 TextWizard	[Arguments]	${model}	${field}	${value}
@@ -240,9 +269,9 @@ X2Many-Text	[Arguments]	${model}	${field}	${value}
 
 Select-Option	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	#Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
-	#Select From List By Value   	xpath=//select[@id='${model}' and @name='${field}']    ${value}
+	Select From List By Value   	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 	ElementPostCheck
 
 Checkbox-Select	[Arguments]	${model}	${field}
@@ -260,7 +289,7 @@ NotebookPage	[Arguments]	${string}
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
-	Click Link	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
+	Click element	xpath=(//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a)[last()]
 	ElementPostCheck
 
 One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}

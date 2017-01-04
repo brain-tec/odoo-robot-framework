@@ -24,7 +24,7 @@ Set Up
 
 # checked: 8.0 ok
 Login    [Arguments]    ${user}=${USER}    ${password}=${PASSWORD}    ${db}=${ODOO_DB}
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_8_PORT}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
     Open Browser                        ${ODOO_URL_DB}  browser=${BROWSER}
     Maximize Browser Window
     Go To                               ${ODOO_URL_DB}
@@ -102,9 +102,12 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 # checked: 8.0 ok
 Button     [Arguments]   ${model}=	${button_name}=	${class}=
 	#Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_pager_value')]
+	Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]	2 min
 	Run Keyword Unless	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+	Run Keyword Unless	'${model}' == ''	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
 	Run Keyword Unless	'${model}' == ''	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
 	Run Keyword If	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@class='${class}']
+	Run Keyword If	'${model}' == ''	Focus	xpath=//button[@class='${class}']
 	Run Keyword If	'${model}' == ''	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
@@ -117,6 +120,12 @@ Other button     [Arguments]     ${model}    ${button_name}
 # checked: 8.0 ok
 Many2OneSelect    [Arguments]    ${model}    ${field}    ${value}
     ElementPreCheck	    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+    Input Text		    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+    Click Link             xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
+    Textfield Should Contain    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+    ElementPostCheck
+
+X2Many-Many2OneSelect    [Arguments]    ${model}    ${field}    ${value}
     Input Text		    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
     Click Link             xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
     Textfield Should Contain    xpath=//div[contains(@class,'openerp')][last()]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
@@ -147,12 +156,14 @@ Text    [Arguments]    ${model}    ${field}    ${value}
 
 Select-Option    [Arguments]    ${model}    ${field}    ${value}    
     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-    Select From List By Label	xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+    #Select From List	xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
+    click element       xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+    click element       xpath=//div[contains(@class,'openerp')][last()]//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']/option[@data-bt-testing-value='${value}']
     ElementPostCheck
 
-Checkbox    [Arguments]    ${model}    ${field}
+Checkbox-Select    [Arguments]    ${model}    ${field}
     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
-    Checkbox Should Not Be Selected	xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
+    #Checkbox Should Not Be Selected	xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
     Click Element          xpath=//div[contains(@class,'openerp')][last()]//input[@type='checkbox' and @data-bt-testing-name='${field}']
     ElementPostCheck
 
@@ -162,7 +173,7 @@ NotebookPage    [Arguments]    ${model}=None
 # checked: 8.0 ok
 NewOne2Many    [Arguments]    ${model}    ${field}
     ElementPreCheck        xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_form_field_one2many')]/div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//tr/td[contains(@class,'oe_form_field_one2many_list_row_add')]/a
-    Click Link             xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_form_field_one2many')]/div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//tr/td[contains(@class,'oe_form_field_one2many_list_row_add')]/a
+    Click Link             xpath=(//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_form_field_one2many')]/div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//tr/td[contains(@class,'oe_form_field_one2many_list_row_add')]/a)[last()]
     ElementPostCheck
 
 One2ManySelectRecord  [Arguments]    ${model}    ${field}    ${submodel}    @{fields}
