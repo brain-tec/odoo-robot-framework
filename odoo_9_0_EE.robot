@@ -6,24 +6,27 @@ Documentation  Common keywords for OpenERP tests
 ...	imported here so that no other file needs to import it.
 Library	    Selenium2Library
 Library  	String
-Library     connection_erp.py
-Library     Collections
-#Library     XvfbRobot
-
+# Library     connection_erp.py
+# Library     Collections
+Variables   ${CONFIG}
+# Library     XvfbRobot
 
 
 *** Keywords ***
 Set Up
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
-
-    #ff default caps shoul be always presented
+#ff default caps shoul be always present
     ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
-    #marionette optional, just if we need it
+
+#marionette optional, just if we need it
     #Set To Dictionary     ${ff default caps}    marionette=${True}
+    log to console   Marionette off
 
+#acceptSslCerts should be used always
+    Set To Dictionary     ${ff default caps}    acceptSslCerts=${True}
 
-    #Virtual display if we want the test to run in background
+#Virtual display if we want the test to run in background
     #Start Virtual Display   1920    1080
+    log to console     Virtual Display On
 
 sidebaraction     [Arguments]	${action}
     sleep   1s
@@ -34,26 +37,19 @@ sidebaraction     [Arguments]	${action}
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
+
 	Maximize Browser Window
-	Go To                           ${ODOO_URL_DB}/web/database/selector
+	Go To                           ${ODOO_URL}
 	Set Selenium Speed	            ${SELENIUM_DELAY}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
 	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
-	#Run Keyword and Ignore error    Click element   //a[@href="/web/login"]
-	Wait Until Element is Visible	name=login
-	Input Text	name=login  ${user}
-	Input Password	name=password	${password}
+	#run keyword and ignore error        Click element   //a[@href="/web/login"]
+	Wait Until Page Contains Element	name=login
+	Input Text	name=login  ${ODOO_USER}
+	Input Password	name=password	${ODOO_PASSWORD}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
 	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
-
-# checked: 9.0 ok
-DatabaseConnect    [Arguments]    ${odoo_db}=${ODOO_DB}    ${odoo_db_user}=${ODOO_DB_USER}    ${odoo_db_password}=${ODOO_DB_PASSWORD}    ${odoo_db_server}=${SERVER}    ${odoo_db_port}=${ODOO_DB_PORT}
-		Connect To Database Using Custom Params	psycopg2        database='${odoo_db}',user='${odoo_db_user}',password='${odoo_db_password}',host='${odoo_db_server}',port=${odoo_db_port}
-
-# checked: 9.0 ok
-DatabaseDisconnect
-		Disconnect from Database
 
 # ok: 90EE
 BackToMainMenu
@@ -62,41 +58,38 @@ BackToMainMenu
 	ElementPostCheck
 
 # ok: 90EE
-MainMenu	[Arguments]	${menu}
-	Click Link	xpath=//a[@data-menu='${menu}']
+MainMenu    [Arguments]     ${menu}
+	Click Link	xpath=//a[@data-testing-menu='${menu}']
 	Wait Until Page Contains Element	xpath=//body[contains(@class, 'o_web_client')]
 	ElementPostCheck
 
 # ok: 90EE
 SubMenu	[Arguments]	${menu}
-	Click Link	xpath=//a[@data-bt-testing-sub-menu_id='${menu}']
+	Click Link	xpath=//a[@data-testing-sub-menu='${menu}']
 	ElementPostCheck
 
 # ok: 90EE
 SubSubMenu	[Arguments]	${menu}
-	Click Link	xpath=//a[@data-menu='${menu}']
+	Click Link	xpath=//a[@data-testing-sub-sub-menu='${menu}']
 	ElementPostCheck
 
 SubMenuXMLid    [Arguments]		${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${ODOO_USER}	${ODOO_PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
-    Run Keyword Unless      ${SubMenuID}        Fail    ERROR: Module or Name not correct
-   
+
 MainMenuXMLid    [Arguments]    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${ODOO_USER}	${ODOO_PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
-    Run Keyword Unless      ${MainMenuID}        Fail    ERROR: Module or Name not correct
-    
+
 SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    ${SubSubMenuID}=		get_menu_res_id	${ODOO_URL}	${ODOO_DB}	${ODOO_USER}	${ODOO_PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubSubMenuID}            SubSubMenu         ${SubSubMenuID}
-    Run Keyword Unless      ${SubSubMenuID}        Fail    ERROR: Module or Name not correct
 
 
 # checked: 9.0 ok
@@ -119,7 +112,7 @@ SelectNotebook	[Arguments]	${element}
 # ok: 90EE
 IsModal
 	# Check if modal is open
-	Set Selenium Implicit Wait	1s	
+	Set Selenium Implicit Wait	1s
 	${modal}	${message}=		Run Keyword And Ignore Error	Element Should Be Visible	xpath=//div[contains(@class,'modal')]
 	#Page should Contain Element	xpath=//div[contains(@class,'modal')]
 	Set Selenium Implicit Wait	${SELENIUM_TIMEOUT}
@@ -158,7 +151,7 @@ Button
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
 	${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
-    ${ButtonID}=		    get_button_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}  ${IR_MODEL_DATA_MODEL}  ${MODULE}	${NAME}
+    ${ButtonID}=		    get_button_res_id	${ODOO_URL}	${ODOO_DB}	${ODOO_USER}	${ODOO_PASSWORD}  ${IR_MODEL_DATA_MODEL}  ${MODULE}	${NAME}
     Run Keyword If          ${ButtonID}               Button         model=${Model}  button_name=${ButtonID}
 
 ButtonWizard
@@ -173,7 +166,7 @@ Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
-	
+
 Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
@@ -230,7 +223,7 @@ Char	[Arguments]	${model}	${field}	${value}
 	Modal	Clear Element Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
-	
+
 # ok: 9.0EE
 CharWizard	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
@@ -246,12 +239,12 @@ X2Many-Char	[Arguments]	${model}	${field}	${value}
 
 Float	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	  value=${value}
+	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 X2Many-Float	[Arguments]	${model}	${field}	${value}
-	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
+	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
+	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 FloatWizard	[Arguments]	${model}	${field}	${value}
@@ -263,29 +256,23 @@ Text	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
-	
+
 TextWizard	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Input Text	xpath=//textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 X2Many-Text	[Arguments]	${model}	${field}	${value}
-    Modal   Click Element xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
-    Modal	Clear Element Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
+	Modal	Clear Element Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']
 	Modal	Input Text	xpath=//textarea[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
 	ElementPostCheck
 
-Select-Option	[Arguments]	${model}	${field}	${value}	
+Select-Option	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	#Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
 	Select From List By Value   	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 	ElementPostCheck
-
-X2Many-Selection [Arguments] ${model} ${field} ${value}
-    Modal   Click Element   xpath=//select[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
-    Modal   Select From List By Value   xpath=//select[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']  value=${value}
-    ElementPostCheck
 
 Checkbox-Select	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//input[@type='checkbox' and @data-bt-testing-name='${field}']
@@ -398,11 +385,10 @@ MainWindowSearchTextField   [Arguments]	${field}	${value}
 	ElementPostCheck
 
 MainWindowSearchNow
-	
+
 MainWindowMany2One	[Arguments]	${field}	${value}
 	Click Element	xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']  don't wait
 	Input Text	xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']	${value}
 	Click Element	xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']/following-sibling::span[contains(@class, 'oe-m2o-drop-down-button')]/img don't wait
 	Click Link	xpath=//ul[contains(@class, 'ui-autocomplete') and not(contains(@style, 'display: none'))]//a[self::*/text()='${value}']	don't wait
 	ElementPostCheck
-	
