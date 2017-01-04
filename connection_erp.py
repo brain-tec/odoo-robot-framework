@@ -7,6 +7,7 @@
 #    See LICENSE file for full licensing details.
 ##############################################################################
 import logging
+import string
 logger = logging.getLogger(__name__)
 __version__ = '1.6.3'
 
@@ -14,6 +15,15 @@ try:
     import erppeek
 except:
     logger.warning("Please install sudo pip install -U erppeek")
+
+def return_day (date):
+    if string.find(date,'.'):
+        days = string.split(date,'.')
+        day = days[0]
+    else:
+        days = string.split(date, '/')
+        day = days[1]
+    return int(day)
 
 def create_new_db(server, password, name, demo = False, user_password='admin', lang='en_US'):
     connection = erppeek.Client(server)
@@ -178,6 +188,7 @@ def install():
     install_module("http://localhost:8069",
                    "test_create_db", "admin", "l10n_ch")
 '''
+
 
 #    get_menu_res_id('http://localhost:8069',
 # 'test_create_db', 'admin', 'admin', 'base', 'menu_administration')
