@@ -186,17 +186,39 @@ X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
+Input letters   [Arguments]    ${locator}    ${text}
+#input text letter by letter
+        ${items}    Get Length    ${text}
+        : FOR    ${item}    IN RANGE    ${items}
+        \    Press Key    ${locator}    ${text[${item}]}
+
 
 # The blue arrow on the right side of a many2one
 Many2One-External	[Arguments]	${model}	${field}
 	Modal	Click Button	xpath=//div[contains(@class,'o_form_field_many2one') and .//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//button[contains(@class,'o_external_button')]
 
+get day     [Arguments]    ${date}
+    ${day}=    return_day  ${date}
+	log to console   ${day}
+	[return]     ${day}
+
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-    sleep   1s
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	ElementPostCheck
+	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
+	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	Click Element          xpath=(//div[@class="datepicker"]//td[@class='day'])[last()]
+    Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    ${day}=     get day  ${value}
+    #${day}=     fetch from Left   ${value}  .
+    #${oDay}=    fetch from right    ${day}  0
+    log to console  day=${day}
+    Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
+    #log to console  oDay=${oDay}
+	#run keyword if      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
+	#run keyword Unless      '${oDay}'==''  Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${oDay}"]
+
+Clear text  [Arguments]	${model}	${field}
+    Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
