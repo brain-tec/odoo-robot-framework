@@ -17,11 +17,14 @@ except:
     logger.warning("Please install sudo pip install -U erppeek")
 
 def return_day (date):
-    if string.find(date,'.'):
-        days = string.split(date,'.')
+    date_str=str (date)
+    if date_str.find('.')>=0:
+        #logger.error("{0}".format("."))
+        days = date_str.split('.')
         day = days[0]
     else:
-        days = string.split(date, '/')
+        #logger.error("{0}".format("/"))
+        days = date_str.split('/')
         day = days[1]
     return int(day)
 

@@ -45,7 +45,7 @@ Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
-	Wait Until Page Contains Element	xpath=//nav[contains(@class, 'navbar')]	timeout=30 sec
+	Wait Until Page Contains Element	xpath=//div[contains(@class, 'o_application_switcher')]	timeout=30 sec
 
 # checked: 9.0 ok
 DatabaseConnect    [Arguments]    ${odoo_db}=${ODOO_DB}    ${odoo_db_user}=${ODOO_DB_USER}    ${odoo_db_password}=${ODOO_DB_PASSWORD}    ${odoo_db_server}=${SERVER}    ${odoo_db_port}=${ODOO_DB_PORT}
@@ -57,6 +57,7 @@ DatabaseDisconnect
 
 # ok: 90EE
 BackToMainMenu
+    Wait Until Page Contains Element    xpath=//a[contains(@class, 'o_menu_toggle')]
 	Click Link	xpath=//a[contains(@class, 'o_menu_toggle')]
 	Wait Until Page Contains Element	xpath=//body[contains(@class, 'o_web_client')]
 	ElementPostCheck
@@ -78,18 +79,12 @@ SubSubMenu	[Arguments]	${menu}
 	ElementPostCheck
 
 SubMenuXMLid    [Arguments]		${Name}
-	${MODULE}=              Fetch From Left            ${Name}              .
-    ${NAME}=                Fetch From Right           ${Name}              .
-    ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
-    Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
-    Run Keyword Unless      ${SubMenuID}        Fail    ERROR: Module or Name not correct
+    Wait Until Page Contains Element    xpath=//a[@data-menu-xmlid='${Name}']
+	Click Link	xpath=//a[@data-menu-xmlid='${Name}']
    
 MainMenuXMLid    [Arguments]    ${Name}
-	${MODULE}=              Fetch From Left            ${Name}              .
-    ${NAME}=                Fetch From Right           ${Name}              .
-    ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
-    Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
-    Run Keyword Unless      ${MainMenuID}        Fail    ERROR: Module or Name not correct
+    Wait Until Page Contains Element    xpath=//a[@data-menu-xmlid='${Name}']
+    Click Link	xpath=//a[@data-menu-xmlid='${Name}']
     
 SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .
@@ -186,36 +181,17 @@ X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	Modal	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 
-Input letters   [Arguments]    ${locator}    ${text}
-#input text letter by letter
-        ${items}    Get Length    ${text}
-        : FOR    ${item}    IN RANGE    ${items}
-        \    Press Key    ${locator}    ${text[${item}]}
-
 
 # The blue arrow on the right side of a many2one
 Many2One-External	[Arguments]	${model}	${field}
 	Modal	Click Button	xpath=//div[contains(@class,'o_form_field_many2one') and .//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//button[contains(@class,'o_external_button')]
 
-get day     [Arguments]    ${value}
-    ${date}=    convert to string  ${value}
-    ${day}=    return_day  ${date}
-	log to console   ${day}
-	[return]     ${day}
-
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
-	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-	Click Element       xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
-	run keyword and ignore error    Click Element	xpath=/html/body/div[10]/div/div/div[3]/button
-    Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-    ${day}=     return_day  ${value}
-    log to console  day=${day}
-    Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
-
-Clear text  [Arguments]	${model}	${field}
-    Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    sleep   1s
+	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	ElementPostCheck
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
