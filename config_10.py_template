@@ -1,0 +1,24 @@
+# Please rename this file to config_80.py and adapt it to your needs
+
+# Selenium
+
+# Time till the next command is executed
+SELENIUM_DELAY = 0
+
+# How long a "Wait Until ..." command should wait
+SELENIUM_TIMEOUT = 20
+BROWSER = "ff"
+Marionette= True
+
+# Odoo
+SERVER = "localhost"
+ODOO_PORT = "8069"
+ODOO_URL = "http://" + SERVER + ":" + ODOO_PORT
+ODOO_DB = "demo_v10"
+USER = "admin"
+PASSWORD = "admin"
+
+# DB data
+ODOO_DB_USER = "Alex"
+ODOO_DB_PASSWORD = "Alex"
+ODOO_DB_PORT = "5432"
