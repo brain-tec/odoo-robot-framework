@@ -75,15 +75,16 @@ SubMenu	[Arguments]	${menu}
 
 # ok: 90EE
 SubSubMenu	[Arguments]	${menu}
-	Click Link	xpath=//a[@data-menu='${menu}']
+    Wait Until Element is visible    xpath=//a[@data-menu='${menu}']
+	Click Element	xpath=//a[@data-menu='${menu}']
 	ElementPostCheck
 
 SubMenuXMLid    [Arguments]		${Name}
-    Wait Until Page Contains Element    xpath=//a[@data-menu-xmlid='${Name}']
-	Click Link	xpath=//a[@data-menu-xmlid='${Name}']
+    Wait Until Element is visible     xpath=//a[@data-menu-xmlid='${Name}']
+	Click Element	xpath=//a[@data-menu-xmlid='${Name}']
    
 MainMenuXMLid    [Arguments]    ${Name}
-    Wait Until Page Contains Element    xpath=//a[@data-menu-xmlid='${Name}']
+    Wait Until Element is visible    xpath=//a[@data-menu-xmlid='${Name}']
     Click Link	xpath=//a[@data-menu-xmlid='${Name}']
     
 SubSubMenuXMLid    [Arguments]    ${Name}
@@ -144,10 +145,10 @@ Radio	[Arguments]	${model}	${field}	${value}
 Button
 	[Arguments]	${model}=	${button_name}=	${class}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
-	Run Keyword Unless	'${model}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
-	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
-	Run Keyword If	'${model}' == ''	Modal	Focus	xpath=//button[@class='${class}'][last()]
-	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}'][last()]
+	Run Keyword Unless	'${model}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}' and not(contains(@class,'o_form_invisible'))]
+	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}' and not(contains(@class,'o_form_invisible'))]
+	Run Keyword If	'${model}' == ''	Modal	Focus	xpath=//button[@class='${class}']
+	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}']
 	ElementPostCheck
 
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
@@ -212,9 +213,10 @@ CharWizard	[Arguments]	${model}	${field}	${value}
 	ElementPostCheck
 
 X2Many-Char	[Arguments]	${model}	${field}	${value}
-    Modal   Click Element	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
-	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
-	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	value=${value}
+    #Click Element    //td[@data-field="${field}" and @data-bt-testing-model_name="${model}"]
+   # Modal   Click Element	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
+#	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
+    Input Text	xpath=//input[ancestor::div[contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
 
 Float	[Arguments]	${model}	${field}	${value}
