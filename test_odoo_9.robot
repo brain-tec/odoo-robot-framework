@@ -77,7 +77,7 @@ Create Quotation
 	Button	model=sale.order	button_name=oe_list_add
 	Many2OneSelect    sale.order	partner_id	Agrolait
 	Date  	sale.order	validity_date	 12/21/2017
-	#Date  	sale.order	validity_date	 12.01.2017
+	#Date  	sale.order	validity_date	 21.12.2017
 	NewOne2Many    sale.order	order_line
 	X2Many-Many2OneSelect	sale.order.line	  product_id	ipad mini
 second order line
