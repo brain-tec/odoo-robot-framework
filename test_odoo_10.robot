@@ -15,14 +15,14 @@ Create Variables
     Set To Dictionary     ${ff default caps}    marionette=${True}
     ${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin    90
 	log to console	 ${module}
-	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	179
+	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	189
 	log to console	 ${module}
 Drop DB
-	#${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
+	${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
 	log to console	${drop}
 Create db
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
-	#${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_US
+	${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_US
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
 Install sales
@@ -50,7 +50,6 @@ Partner Address
 	Button	model=res.partner	button_name=open_parent
 	Char	res.partner	street	69 street
 	Char	res.partner	city	London
-	#Many2OneSelect	res.partner	state_id	California
 	Many2OneSelect	res.partner	country_id	United Kingdom
 Contact phone
     Button	model=res.partner	button_name=oe_form_button_save
@@ -59,7 +58,6 @@ Contact phone
 	Char	res.partner	mobile	5555346783
 Text partner
 	Text	res.partner	comment	internal note
-	#NotebookPage    Sales & Purchases
 Other data
 	Many2OneSelect    res.partner	user_id	Administrator
 	Checkbox-Select	res.partner	supplier
@@ -74,8 +72,8 @@ Test SelectListView
 	Button	model=sale.order	button_name=oe_form_button_edit
 	Button	model=sale.order	button_name=oe_form_button_save
 Create Quotation
-    #SubMenuXMLid   base.menu_sales
-    SubSubMenuXMLid    sale.menu_sale_quotations
+    SubMenuXMLid   sales_team.menu_sales
+    SubSubMenuXMLid    sale.menu_sale_order
 	Button	model=sale.order	button_name=oe_list_add
 	Many2OneSelect    sale.order	partner_id	Agrolait
 	Date	sale.order	validity_date	 12/21/2017
@@ -98,12 +96,18 @@ Quotation
 Confirm SO
 	Button	model=sale.order	button_name=action_confirm
 Create Invoice
-	Button	model=sale.order	button_name=239
+	Button	model=sale.order	button_name=oe_form_button_edit
+	click element  //a[@data-bt-testing-original-string="Order Lines"]
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[1]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[2]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	sleep   1s
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[3]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	sleep   1s
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
+	Button	model=sale.order	button_name=259
 	Radio	sale.advance.payment.inv	advance_payment_method	all
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
-	Button	model=account.invoice	button_name=invoice_open
-	Button	model=account.invoice	button_name=invoice_pay_customer
-	Select-Option	account.voucher	journal_id	17
-	Button	model=account.voucher	button_name=button_proforma_voucher
 close
     close browser

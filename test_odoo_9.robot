@@ -18,11 +18,11 @@ Create Variables
 	${module}=	get_module_name	${ODOO_URL_DB}	${ODOO_DB}		admin	admin	186
 	log to console	 ${module}
 Drop DB
-	#${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
+	${drop}=	Drop Db     ${ODOO_URL_DB}	  admin	  ${ODOO_DB}
 	log to console	${drop}
 Create db
 	#url, postgres_superuser_pw, new_DB name, boolean demo_data_loaded, new_db_pw
-	#${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   de_DE
+	${created}=	    Create New Db	${ODOO_URL_DB}	admin	${ODOO_DB}	True	admin   en_US
 	log to console	${created}
 	Run Keyword Unless	${created}	Fail
 Install sales
@@ -57,7 +57,6 @@ Contact phone
 	Char	res.partner	mobile	5555346783
 Text partner
 	Text	res.partner	comment	internal note
-	#NotebookPage    Sales & Purchases
 Other data
 	Many2OneSelect    res.partner	user_id	Administrator
 	Checkbox-Select	res.partner	supplier
@@ -74,12 +73,11 @@ Test SelectListView
 	Button	model=sale.order	button_name=oe_form_button_save
 Create Quotation
     SubMenuXMLid   base.menu_sales
-    SubSubMenuXMLid    sale.menu_sale_quotations
+    SubSubMenuXMLid    sale.menu_sale_order
 	Button	model=sale.order	button_name=oe_list_add
 	Many2OneSelect    sale.order	partner_id	Agrolait
 	Date  	sale.order	validity_date	 12/21/2017
-	#Date  	sale.order	validity_date	 12.01.2017
-*stop*
+	#Date  	sale.order	validity_date	 21.12.2017
 	NewOne2Many    sale.order	order_line
 	X2Many-Many2OneSelect	sale.order.line	  product_id	ipad mini
 second order line
@@ -93,19 +91,30 @@ Third Order Line
 	Char	sale.order	client_order_ref	Hello Test
 Save Quotation
 	Button	model=sale.order	button_name=oe_form_button_save
-*and cancel*
+and cancel
 	Button	model=sale.order	button_name=action_cancel
 Quotation
 	Button	model=sale.order	button_name=action_draft
 Confirm SO
 	Button	model=sale.order	button_name=action_confirm
 Create Invoice
+    Button	model=sale.order	button_name=oe_form_button_edit
+    click element  //a[@data-bt-testing-original-string="Order Lines"]
+    sleep   1s
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[1]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[2]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	sleep   1s
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
+	click element  //table[@class="o_list_view table table-condensed table-striped"]/tbody/tr[3]/td[@data-field="qty_delivered" and @data-bt-testing-model_name="sale.order.line"]
+	sleep   1s
+	X2Many-Char	    sale.order.line	    qty_delivered	1.000
 	Button	model=sale.order	button_name=246
 	Radio	sale.advance.payment.inv	advance_payment_method	all
 	Button	model=sale.advance.payment.inv	button_name=create_invoices
-	Button	model=account.invoice	button_name=invoice_open
-	Button	model=account.invoice	button_name=invoice_pay_customer
-	Select-Option	account.voucher	journal_id	17
-	Button	model=account.voucher	button_name=button_proforma_voucher
+	#Button	model=account.invoice	button_name=invoice_open
+	#Button	model=account.invoice	button_name=invoice_pay_customer
+	#Select-Option	account.voucher	journal_id	17
+	#Button	model=account.voucher	button_name=button_proforma_voucher
 close
     close browser
