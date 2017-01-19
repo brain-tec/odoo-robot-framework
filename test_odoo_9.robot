@@ -57,7 +57,6 @@ Contact phone
 	Char	res.partner	mobile	5555346783
 Text partner
 	Text	res.partner	comment	internal note
-	#NotebookPage    Sales & Purchases
 Other data
 	Many2OneSelect    res.partner	user_id	Administrator
 	Checkbox-Select	res.partner	supplier
