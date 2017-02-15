@@ -207,8 +207,12 @@ Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
 	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-	Click Element       xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
-	run keyword and ignore error    Click Element	xpath=/html/body/div[10]/div/div/div[3]/button
+	#run keyword and ignore error     wait until element is visible   xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
+	${pass}=     run keyword and ignore error     Click Element       xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
+	log to console  ${pass}
+	run keyword unless    '${pass[0]}'=='PASS'   wait until element is visible   xpath=(//div[@class="datepicker"])//td[@class='day']
+	run keyword unless    '${pass[0]}'=='PASS'   Click Element   xpath=(//div[@class="datepicker"])//td[@class='day']
+	#run keyword and ignore error    Click Element	xpath=/html/body/div[10]/div/div/div[3]/button
     Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
     ${day}=     return_day  ${value}
     log to console  day=${day}
