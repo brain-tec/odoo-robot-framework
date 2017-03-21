@@ -41,17 +41,17 @@ Login    [Arguments]    ${user}=${USER}    ${password}=${PASSWORD}    ${db}=${OD
 
 # checked: 8.0 ok
 DatabaseConnect    [Arguments]    ${odoo_db}=${ODOO_DB}    ${odoo_db_user}=${ODOO_DB_USER}    ${odoo_db_password}=${ODOO_DB_PASSWORD}    ${odoo_db_server}=${SERVER}    ${odoo_db_port}=${ODOO_DB_PORT}
-		Connect To Database Using Custom Params	psycopg2        database='${odoo_db}',user='${odoo_db_user}',password='${odoo_db_password}',host='${odoo_db_server}',port=${odoo_db_port}
+    Connect To Database Using Custom Params	psycopg2        database='${odoo_db}',user='${odoo_db_user}',password='${odoo_db_password}',host='${odoo_db_server}',port=${odoo_db_port}
 
 # checked: 8.0 ok
 DatabaseDisconnect
-		Disconnect from Database
-    
+    Disconnect from Database
+
 # checked: 8.0 ok
 MainMenu    [Arguments]    ${menu}
-	Click Link				xpath=//div[@id='oe_main_menu_placeholder']/ul/li/a[@data-menu='${menu}']
-	Wait Until Page Contains Element	xpath=//div[contains(@class, 'oe_secondary_menus_container')]/div[contains(@class, 'oe_secondary_menu') and not(contains(@style, 'display: none'))]	
-	ElementPostCheck
+    Click Link				xpath=//div[@id='oe_main_menu_placeholder']/ul/li/a[@data-menu='${menu}']
+    Wait Until Page Contains Element	xpath=//div[contains(@class, 'oe_secondary_menus_container')]/div[contains(@class, 'oe_secondary_menu') and not(contains(@style, 'display: none'))]	
+    ElementPostCheck
 
 # checked: 8.0 ok
 SubMenu    [Arguments]    ${menu}
@@ -59,14 +59,14 @@ SubMenu    [Arguments]    ${menu}
     Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_view_manager_body')]
 
 SubMenuXMLid    [Arguments]		${Name}
-	${MODULE}=              Fetch From Left            ${Name}              .
+    ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${SubMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${SubMenuID}               SubMenu         ${SubMenuID}
     Run Keyword Unless          ${SubMenuID}        Fail    ERROR: Module or Name not correct
    
 MainMenuXMLid    [Arguments]    ${Name}
-	${MODULE}=              Fetch From Left            ${Name}              .
+    ${MODULE}=              Fetch From Left            ${Name}              .
     ${NAME}=                Fetch From Right           ${Name}              .
     ${MainMenuID}=		    get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
     Run Keyword If          ${MainMenuID}               MainMenu         ${MainMenuID}
@@ -75,17 +75,17 @@ MainMenuXMLid    [Arguments]    ${Name}
 
 # checked: 8.0 ok
 ChangeView    [Arguments]    ${view}
-   Click Link                          xpath=//div[contains(@class,'openerp')][last()]//ul[contains(@class,'oe_view_manager_switch')]//a[contains(@data-view-type,'${view}')]
-   Wait Until Page Contains Element    xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_view_manager_view_${view}') and not(contains(@style, 'display: none'))]
-   ElementPostCheck
+    Click Link                          xpath=//div[contains(@class,'openerp')][last()]//ul[contains(@class,'oe_view_manager_switch')]//a[contains(@data-view-type,'${view}')]
+    Wait Until Page Contains Element    xpath=//div[contains(@class,'openerp')][last()]//div[contains(@class,'oe_view_manager_view_${view}') and not(contains(@style, 'display: none'))]
+    ElementPostCheck
 
 # main window
 # view-manager-main-content
 
 # Checks that are done always before a element is executed
 ElementPreCheck    [Arguments]    ${element}
-	Execute Javascript      console.log("${element}");
-	# Element may be in a tab. So click the parent tab. If there is no parent tab, forget about the result
+    Execute Javascript      console.log("${element}");
+    # Element may be in a tab. So click the parent tab. If there is no parent tab, forget about the result
     Execute Javascript      var path="${element}".replace('xpath=','');var id=document.evaluate("("+path+")/ancestor::div[contains(@class,'oe_notebook_page')]/@id",document,null,XPathResult.STRING_TYPE,null).stringValue; if(id != ''){ window.location = "#"+id; $("a[href='#"+id+"']").click(); console.log("Clicked at #" + id); } return true;
 
 
@@ -101,15 +101,15 @@ WriteInField                [Arguments]     ${model}    ${fieldname}    ${value}
 
 # checked: 8.0 ok
 Button     [Arguments]   ${model}=	${button_name}=	${class}=
-	#Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_pager_value')]
-	Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]	2 min
-	Run Keyword Unless	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
-	Run Keyword Unless	'${model}' == ''	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
-	Run Keyword Unless	'${model}' == ''	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
-	Run Keyword If	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@class='${class}']
-	Run Keyword If	'${model}' == ''	Focus	xpath=//button[@class='${class}']
-	Run Keyword If	'${model}' == ''	Click Button	xpath=//button[@class='${class}']
-	ElementPostCheck
+    #Wait Until Page Contains Element	xpath=//div[contains(@class,'oe_pager_value')]
+    Wait Until Page Contains Element    xpath=//body[not(contains(@class, 'oe_wait'))]	2 min
+    Run Keyword Unless	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+    Run Keyword Unless	'${model}' == ''	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+    Run Keyword Unless	'${model}' == ''	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}']
+    Run Keyword If	'${model}' == ''	Wait Until Element is Visible	xpath=//button[@class='${class}']
+    Run Keyword If	'${model}' == ''	Focus	xpath=//button[@class='${class}']
+    Run Keyword If	'${model}' == ''	Click Button	xpath=//button[@class='${class}']
+    ElementPostCheck
 
 Other button     [Arguments]     ${model}    ${button_name}
      Wait Until Page Contains Element    xpath=//div[contains(@class,'oe_pager_value')]
