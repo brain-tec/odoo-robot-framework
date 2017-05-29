@@ -61,6 +61,20 @@ def install_module(server, db, password, module):
     return False
 
 
+def upgrade_module(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
+                                password=password, transport=None,
+                                verbose=False)
+    connection.upgrade(module)
+    return True
+
+def module_is_installed(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
+                                password=password, transport=None,
+                                verbose=False)
+    modules_installed = connection.modules(installed=True)
+    return module in modules_installed.get('installed', [])
+    
 def uninstall_module(server, db, password, module):
     connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
@@ -175,14 +189,14 @@ def get_id(server, db, user, password, model, product_tmpl_id):
 
 def get_menu_res_id(server, db, user, password, module, name):
     return get_res_id(server, db,
-		      user, password,
-		      model= 'ir.ui.menu', module=module, name=name)
+                      user, password,
+                      model= 'ir.ui.menu', module=module, name=name)
 
 
 def get_button_res_id(server, db, user, password, model, module, name):
     return get_res_id(server, db, 
-		      user, password,
-		      model=model, module=module, name=name)
+                      user, password,
+                      model=model, module=module, name=name)
 '''
 def create_db():
     return create_new_db("http://localhost:8069",
