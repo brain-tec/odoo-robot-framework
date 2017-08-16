@@ -17,7 +17,7 @@ Set Up
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 
     #ff default caps shoul be always presented
-    ${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
+    #${ff default caps}=         Evaluate    sys.modules['selenium.webdriver'].common.desired_capabilities.DesiredCapabilities.FIREFOX    sys,selenium.webdriver
     #marionette optional, just if we need it
     #Set To Dictionary     ${ff default caps}    marionette=${True}
 
@@ -206,17 +206,18 @@ get day     [Arguments]    ${value}
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
-	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	#Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
 	#run keyword and ignore error     wait until element is visible   xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
-	${pass}=     run keyword and ignore error     Click Element       xpath=(//div[@class="datepicker"])[last()]//td[@class='day']
-	log to console  ${pass}
-	run keyword unless    '${pass[0]}'=='PASS'   wait until element is visible   xpath=(//div[@class="datepicker"])//td[@class='day']
-	run keyword unless    '${pass[0]}'=='PASS'   Click Element   xpath=(//div[@class="datepicker"])//td[@class='day']
+	#sleep   2s
+	#${pass}=     run keyword and ignore error     Click Element       xpath=(//div[@class="datepicker"])//td[@class='day']
+	#log to console  ${pass}
+	#run keyword unless    '${pass[0]}'=='PASS'   wait until element is visible   xpath=(//div[@class="datepicker"])//td[@class='day']
+	#run keyword unless    '${pass[0]}'=='PASS'   Click Element   xpath=(//div[@class="datepicker"])//td[@class='day']
 	#run keyword and ignore error    Click Element	xpath=/html/body/div[10]/div/div/div[3]/button
-    Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-    ${day}=     return_day  ${value}
-    log to console  day=${day}
-    Click Element    xpath=(//div[@class="datepicker"])[last()]//td[normalize-space(.)="${day}"]
+    #Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    #${day}=     return_day  ${value}
+    #log to console  day=${day}
+    #Click Element    xpath=(//div[@class="datepicker"])//td[normalize-space(.)="${day}"]
 
 Clear text  [Arguments]	${model}	${field}
     Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']

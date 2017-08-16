@@ -27,9 +27,9 @@ Set Up
 
 sidebaraction     [Arguments]	${action}
     sleep   1s
-    Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/a
+    Click Element   //div[@class='o_cp_left']/div[2]/div/div[3]/button
     sleep   1s
-	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
+	Click Element   //div[@class='o_cp_left']/div[2]/div/div[3]/ul//a[normalize-space(.)='${action}']
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
@@ -80,12 +80,22 @@ SubSubMenu	[Arguments]	${menu}
 	ElementPostCheck
 
 SubMenuXMLid    [Arguments]		${Name}
-    Wait Until Element is visible     xpath=//a[@data-menu-xmlid='${Name}']
-	Click Element	xpath=//a[@data-menu-xmlid='${Name}']
+    #Wait Until Element is visible     xpath=//a[@data-menu-xmlid='${Name}']
+	#Click Element	xpath=//a[@data-menu-xmlid='${Name}']
+	${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${SubMenuID}=		get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    Run Keyword If          ${SubMenuID}            SubMenu         ${SubMenuID}
+    Run Keyword Unless      ${SubMenuID}        Fail    ERROR: Module or Name not correct
    
 MainMenuXMLid    [Arguments]    ${Name}
-    Wait Until Element is visible    xpath=//a[@data-menu-xmlid='${Name}']
-    Click Link	xpath=//a[@data-menu-xmlid='${Name}']
+    #Wait Until Element is visible    xpath=//a[@data-menu-xmlid='${Name}']
+    ${MODULE}=              Fetch From Left            ${Name}              .
+    ${NAME}=                Fetch From Right           ${Name}              .
+    ${MainMenuID}=		get_menu_res_id	${ODOO_URL_DB}	${ODOO_DB}	${USER}	${PASSWORD}	${MODULE}	${NAME}
+    #Click Link	xpath=//a[@data-menu-xmlid='${Name}']
+    Run Keyword If          ${MainMenuID}            MainMenu         ${MainMenuID}
+    Run Keyword Unless      ${MainMenuID}        Fail    ERROR: Module or Name not correct
     
 SubSubMenuXMLid    [Arguments]    ${Name}
     ${MODULE}=              Fetch From Left            ${Name}              .

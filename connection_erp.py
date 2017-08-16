@@ -28,7 +28,7 @@ def return_day (date):
         day = days[1]
     return int(day)
 
-def create_new_db(server, password, name, demo = False, user_password='admin', lang='en_US'):
+def create_new_db(server, password, name, demo = False, user_password='admin', lang='de_DE'):
     connection = erppeek.Client(server)
     if demo == "True" or demo == "u'True" or demo==True:
         demo = True

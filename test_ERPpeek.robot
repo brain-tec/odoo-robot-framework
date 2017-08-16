@@ -1,15 +1,15 @@
 *** Settings ***
 
 Documentation  Common keywords for OpenERP tests
-Resource       odoo_8_0.robot
+Resource       odoo_10_0.robot
 Library     Selenium2Library
 Library     String
-Variables      config_80.py
+Variables      config_10.py
 Library      connection_erp.py
 
 *** Test Cases ***
 Create Variables
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_8_PORT}
+    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
 Drop DB
 	${drop}=	Drop Db	${ODOO_URL_DB}	admin	${ODOO_DB}
 	log to console	${drop}
