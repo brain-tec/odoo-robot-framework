@@ -4,7 +4,7 @@ Documentation   Basic test for odoo v8. Every Selenium update should pass it
 Resource       odoo_8_0.robot
 Library        Selenium2Library
 Library        String
-Variables      config_80.py
+Variables      config.py
 Library        connection_erp.py
 
 
