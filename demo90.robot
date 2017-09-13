@@ -3,9 +3,9 @@
 Documentation  Test of all elements in OpenERP
 Resource       odoo_9_0_EE.robot
 Library        Selenium2Library    run_on_failure=Capture Page Screenshot
-Variables      config_90.py
+Variables      config.py
 
-#Suite Setup      Run Keywords	Set Up
+Suite Setup      Run Keywords	Set Up
 
 *** Test Cases ***
 Valid Login

@@ -8,7 +8,7 @@ Library	    Selenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
-#Library     XvfbRobot
+Library     XvfbRobot
 
 
 
@@ -33,8 +33,9 @@ sidebaraction     [Arguments]	${action}
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
+    Start Virtual Display   1920    1080
 	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
-	Maximize Browser Window
+	#Maximize Browser Window
 	Go To                           ${ODOO_URL_DB}/web/database/selector
 	Set Selenium Speed	            ${SELENIUM_DELAY}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
@@ -144,6 +145,9 @@ ElementPostCheck
    # Check that page is not blocked by RPC Call
    Wait Until Page Contains Element	xpath=//body[not(contains(@class, 'oe_wait'))]	timeout=2min
 
+Clear text  [Arguments]	${model}	${field}
+    Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+
 WriteInField	[Arguments]	${model}	${fieldname}	${value}	${submodel}=
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']
 	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']|textarea[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${fieldname}']	${value}
@@ -197,12 +201,33 @@ X2Many-Many2OneSelect	[Arguments]	${model}	${field}	${value}
 Many2One-External	[Arguments]	${model}	${field}
 	Modal	Click Button	xpath=//div[contains(@class,'o_form_field_many2one') and .//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//button[contains(@class,'o_external_button')]
 
+newDate	[Arguments]	${model}	${field}	${value}
+	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+	sleep   1s
+	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	Clear Element Text      xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
+    sleep   1s
+    Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
+	sleep   0.5s
+	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	ElementPostCheck
+
+get day     [Arguments]    ${value}
+    ${date}=    convert to string  ${value}
+    ${day}=    return_day  ${date}
+	log to console   ${day}
+	[return]     ${day}
+
 Date	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Click Element        //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
-    sleep   1s
-	Modal	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
-	ElementPostCheck
+	Input text    	//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}\n
+	Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+	Click Element       xpath=(//div[@class="datepicker"])//td[@class='day']
+    Click Element         //input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @class="o_datepicker_input o_form_input"]
+    ${day}=     return_day  ${value}
+    log to console  day=${day}
+    Click Element    xpath=(//div[@class="datepicker"])//td[normalize-space(.)="${day}"]
 
 X2Many-Date	[Arguments]	${model}	${field}	${value}
 	Modal	Input Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-model_name='${model}']] and @data-bt-testing-name='${field}']	${value}
@@ -264,6 +289,7 @@ Select-Option	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	#Modal	Select From List By Value	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	value=${value}
 	#SelectNotebook	xpath=//select[@id='${model}' and @name='${field}']
+	Focus     xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 	Select From List By Value   	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 	ElementPostCheck
 

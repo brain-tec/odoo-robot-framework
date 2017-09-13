@@ -17,5 +17,5 @@ easy_install robotframework-databaselibrary
 
 Save the testfile (from SE Builder) in the same directory as the odoo-robot-framework and execute
 ```bash
-pybot -v CONFIG:config_80.py testfile.txt
+pybot -v CONFIG:config.py testfile.robot
 ```
