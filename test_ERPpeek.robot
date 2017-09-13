@@ -4,7 +4,7 @@ Documentation  Common keywords for OpenERP tests
 Resource       odoo_10_0.robot
 Library     Selenium2Library
 Library     String
-Variables      config_10.py
+Variables      config.py
 Library      connection_erp.py
 
 *** Test Cases ***

@@ -4,7 +4,7 @@ Documentation   Basic test for odoo v9. Every Selenium update should pass it
 Resource       odoo_10_0.robot
 Library        Selenium2Library
 Library        String
-Variables      config_10.py
+Variables      config.py
 Library        connection_erp.py
 
 

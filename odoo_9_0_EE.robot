@@ -1,4 +1,4 @@
-** Settings ***
+*** Settings ***
 
 Documentation  Common keywords for OpenERP tests
 ...	versions of the application. The correct SUT specific resource
@@ -9,6 +9,7 @@ Library  	String
 Library     connection_erp.py
 Library     Collections
 Library     XvfbRobot
+Variables   ${CONFIG}
 
 
 
