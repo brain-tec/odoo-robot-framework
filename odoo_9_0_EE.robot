@@ -102,7 +102,7 @@ SubSubMenuXMLid    [Arguments]    ${Name}
 # checked: 9.0 ok
 ChangeView	[Arguments]	${view}
    Click Button	xpath=//div[contains(@class,'o_cp_switch_buttons')]/button[@data-view-type='${view}']
-   Wait Until Page Contains Element	xpath=//*[contains(@class,'o_${view}_view') and not(contains(@style, 'display: none'))]
+   #Wait Until Page Contains Element	xpath=//*[contains(@class,'o_${view}_view') and not(contains(@style, 'display: none'))]
    ElementPostCheck
 
 # main window
@@ -146,13 +146,12 @@ Radio	[Arguments]	${model}	${field}	${value}
 	Click Element	 xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}' and @value='${value}']
 
 # ok: 9.0EE ok (Mainpage)
-Button
-	[Arguments]	${model}=	${button_name}=	${class}=
+Button  [Arguments]	${model}=	${button_name}=
 	Wait Until Page Contains Element	xpath=//div[contains(@class,'o_cp_pager')]
-	Run Keyword Unless	'${model}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
-	Run Keyword Unless	'${model}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
-	Run Keyword If	'${model}' == ''	Modal	Focus	xpath=//button[@class='${class}'][last()]
-	Run Keyword If	'${model}' == ''	Modal	Click Button	xpath=//button[@class='${class}'][last()]
+	Run Keyword Unless	'${button_name}' == ''	Modal	Focus	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword Unless	'${button_name}' == ''	Modal	Click Button	xpath=//button[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${button_name}'][last()]
+	Run Keyword If	'${button_name}' == ''	Modal	Focus	xpath=//button[@class='${model}'][last()]
+	Run Keyword If	'${button_name}' == ''	Modal	Click Button	xpath=//button[@class='${model}'][last()]
 	ElementPostCheck
 
 ButtonXMLid    [Arguments]		${IR_MODEL_DATA_MODEL}    ${Model}    ${Name}
