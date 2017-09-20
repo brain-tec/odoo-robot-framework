@@ -68,6 +68,23 @@ def install_module(server, db, password, module):
     return False
 
 @to_utf8
+def upgrade_module(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
+                                password=password, transport=None,
+                                verbose=False)
+    connection.upgrade(module)
+    return True
+
+@to_utf8
+def module_is_installed(server, db, password, module):
+    connection = erppeek.Client(server, db=db, user="admin",
+                                password=password, transport=None,
+                                verbose=False)
+    modules_installed = connection.modules(installed=True)
+    return module in modules_installed.get('installed', [])
+
+
+@to_utf8
 def uninstall_module(server, db, password, module):
     connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
