@@ -11,7 +11,6 @@ Suite Teardown              Close Browser
 *** Variables ***
 ${SERVER}                   https://www.google.ch
 ${BROWSER}                  chrome
-${DESIRED_CAPABILITIES}     platform:WIN8,video:True,version:54.0.1,Marionette:True
 
 *** Keywords ***
 Start Browser
