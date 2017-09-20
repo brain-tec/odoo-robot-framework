@@ -16,6 +16,12 @@ try:
 except:
     logger.warning("Please install sudo pip install -U erppeek")
 
+def to_utf8(f):
+    def converter(*args, **kwargs):
+        arguments = map(lambda x: x.encode('utf-8'), args)
+        return f(*arguments, **kwargs)
+    return converter
+
 def return_day (date):
     date_str=str (date)
     if date_str.find('.')>=0:
@@ -28,6 +34,7 @@ def return_day (date):
         day = days[1]
     return int(day)
 
+@to_utf8
 def create_new_db(server, password, name, demo = False, user_password='admin', lang='de_DE'):
     connection = erppeek.Client(server)
     if demo == "True" or demo == "u'True" or demo==True:
@@ -40,7 +47,7 @@ def create_new_db(server, password, name, demo = False, user_password='admin', l
         return True
     return False
 
-
+@to_utf8
 def drop_db(server, password, name):
     connection = erppeek.Client(server)
     echo = "fail"
@@ -49,7 +56,7 @@ def drop_db(server, password, name):
     except:
         return echo
 
-
+@to_utf8
 def install_module(server, db, password, module):
     connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
@@ -60,7 +67,7 @@ def install_module(server, db, password, module):
         return True
     return False
 
-
+@to_utf8
 def uninstall_module(server, db, password, module):
     connection = erppeek.Client(server, db=db, user="admin",
                                 password=password, transport=None,
@@ -71,7 +78,7 @@ def uninstall_module(server, db, password, module):
         return True
     return False
 
-
+@to_utf8
 def get_res_id(server, db, user, password, model, module, name):
     connection = erppeek.Client(server, db,
                                 user, password, transport=None, verbose=False)
@@ -86,7 +93,7 @@ def get_res_id(server, db, user, password, model, module, name):
     ir_model_obj = ir_model_data.read(ir_model_obj[0], ["res_id"])
     return ir_model_obj['res_id']
 
-
+@to_utf8
 def get_module_name(server, db, user, password, res_id):
     connection = erppeek.Client(server, db,
                                 user, password,
@@ -100,7 +107,7 @@ def get_module_name(server, db, user, password, res_id):
     ir_model_obj_module = ir_model_data.read(ir_model_obj[0], ["module"])
     return ir_model_obj_module['module'], ir_model_obj_name['name']
 
-
+@to_utf8
 def get_stock(server, db, user, password, model, product_id):
     connection = erppeek.Client(server, db,
                                 user, password, transport=None, verbose=False)
@@ -118,7 +125,7 @@ def get_stock(server, db, user, password, model, product_id):
         returnValue.append([stock_aux["qty"], stock_aux['location_id'][0]])
     return returnValue
 
-
+@to_utf8
 def get_stock_move(server, db,
                    user, password,
                    model, product_id, variable_name, variable):
@@ -140,7 +147,7 @@ def get_stock_move(server, db,
                             stock_aux['picking_type_id']])
     return returnValue
 
-
+@to_utf8
 def browse(server, db, user, password, name, model, desired):
     connection = erppeek.Client(server, db,
                                 user, password,
@@ -156,7 +163,7 @@ def browse(server, db, user, password, name, model, desired):
     Element_data = Element.read(Element_name[0], [desired])
     return Element_data[desired]
 
-
+@to_utf8
 def get_id(server, db, user, password, model, product_tmpl_id):
     connection = erppeek.Client(server, db,
                                 user, password,
@@ -172,13 +179,13 @@ def get_id(server, db, user, password, model, product_tmpl_id):
     product_product_id = product_product.read(product_product_obj[0], ["id"])
     return product_product_id['id']
 
-
+@to_utf8
 def get_menu_res_id(server, db, user, password, module, name):
     return get_res_id(server, db,
 		      user, password,
 		      model= 'ir.ui.menu', module=module, name=name)
 
-
+@to_utf8
 def get_button_res_id(server, db, user, password, model, module, name):
     return get_res_id(server, db, 
 		      user, password,
