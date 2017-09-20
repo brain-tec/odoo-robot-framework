@@ -7,11 +7,6 @@ pip install robotframework
 pip install robotframework-selenium2library
 git clone https://github.com/brain-tec/odoo-robot-framework.git
 ```
-To use the database test in demo80.txt you also have to install
-```bash
-easy_install robotframework-databaselibrary
-```
-
 
 ## Run tests
 

@@ -31,19 +31,17 @@ sidebaraction     [Arguments]	${action}
     Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/a
     sleep   1s
 	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
+
 # checked: 9.0 ok
-Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
-    Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
-    Start Virtual Display   1920    1080
-	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
-	#Maximize Browser Window
-	Go To                           ${ODOO_URL_DB}/web/database/selector
+Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
+	Open Browser	${ODOO URL}  browser=${BROWSER}
+	Maximize Browser Window
+	Go To                           ${ODOO URL}
 	Set Selenium Speed	            ${SELENIUM_DELAY}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
 	Set Selenium Implicit Wait	    ${SELENIUM_TIMEOUT}
-	Click Element	xpath=//div[1]/div//a[@href="/web?db=${ODOO_DB}"]
-	#Run Keyword and Ignore error    Click element   //a[@href="/web/login"]
-	Wait Until Element is Visible	name=login
+	Click Element	//a[@href="/web?db=${ODOO_DB}"]
+	Wait Until Page Contains Element	name=login
 	Input Text	name=login  ${user}
 	Input Password	name=password	${password}
 	Click Button	xpath=//div[contains(@class,'oe_login_buttons')]/button[@type='submit']
@@ -401,8 +399,6 @@ MainWindowNormalField	[Arguments]	${field}	${value}
 MainWindowSearchTextField   [Arguments]	${field}	${value}
 	Input Text	xpath=//div[@id='oe_app']//div[contains(@id, '_search')]//input[@name='${field}']   ${value}
 	ElementPostCheck
-
-MainWindowSearchNow
 	
 MainWindowMany2One	[Arguments]	${field}	${value}
 	Click Element	xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']  don't wait
@@ -410,4 +406,5 @@ MainWindowMany2One	[Arguments]	${field}	${value}
 	Click Element	xpath=//td[contains(@class, 'view-manager-main-content')]//input[@name='${field}']/following-sibling::span[contains(@class, 'oe-m2o-drop-down-button')]/img don't wait
 	Click Link	xpath=//ul[contains(@class, 'ui-autocomplete') and not(contains(@style, 'display: none'))]//a[self::*/text()='${value}']	don't wait
 	ElementPostCheck
+
 	
