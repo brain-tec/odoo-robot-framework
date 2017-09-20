@@ -2,7 +2,7 @@
 
 Documentation  Test of all elements in OpenERP
 Resource       odoo_9_0_EE.robot
-Library        Selenium2Library    run_on_failure=Capture Page Screenshot
+Library        Selenium2Library
 Variables      config.py
 
 Suite Setup      Run Keywords	Set Up
@@ -12,24 +12,28 @@ Valid Login
 	Login		admin	admin	demo
 
 Main Menu
-	MainMenu	75
+    MainMenuXMLid    base.menu_base_partner
+    Capture Page Screenshot
+
+Sub menu
+	SubMenuXMLid    base.menu_sales
 	Capture Page Screenshot
-	
-SubMenu
-	SubMenu		327
+
+Sub Sub Menu
+	SubSubMenuXMLid    sale.menu_sale_order
 	Capture Page Screenshot
 
 ChangeView
 	ChangeView	graph
 	Capture Page Screenshot
 	ChangeView      list
-        Capture Page Screenshot
+    Capture Page Screenshot
 
 Create
 	Button		oe_form_button_create
-        Capture Page Screenshot
+    Capture Page Screenshot
 	Many2OneSelect	sale.order	partner_id	Agrolait, Thomas Passot
-#	Date		sale.order	date_order	07/30/2013
+	Date		sale.order	date_order	07/30/2013
 	Char		sale.order	client_order_ref	Hallo Welt
 
 AddOne2Many
