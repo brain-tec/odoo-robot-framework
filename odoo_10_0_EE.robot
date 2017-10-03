@@ -4,7 +4,7 @@ Documentation  Common keywords for OpenERP tests
 ...	versions of the application. The correct SUT specific resource
 ...	is imported based on ${SUT} variable. SeleniumLibrary is also
 ...	imported here so that no other file needs to import it.
-Library	    Selenium2Library
+Library	    ExtendedSelenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
@@ -178,7 +178,7 @@ Many2OneSelect	[Arguments]	${model}	${field}	${value}
 	
 Many2OneSelectWizard	[Arguments]	${model}	${field}	${value}
 	SelectNotebook	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
-	Input Text	xpath=//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
+	Input Text	xpath=//div[contains(@div,modal)]//input[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']	${value}
 	Click Link	xpath=//ul[contains(@class,'ui-autocomplete') and not(contains(@style,'display: none'))]/li[1]/a
 	ElementPostCheck
 

@@ -4,7 +4,7 @@ Documentation  Common keywords for OpenERP tests
 ...            versions of the application. The correct SUT specific resource
 ...            is imported based on ${SUT} variable. SeleniumLibrary is also
 ...            imported here so that no other file needs to import it.
-Library     Selenium2Library
+Library     ExtendedSelenium2Library
 Library     String
 Variables   ${CONFIG}
 Library     XvfbRobot
