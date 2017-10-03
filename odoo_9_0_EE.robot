@@ -4,7 +4,7 @@ Documentation  Common keywords for OpenERP tests
 ...	versions of the application. The correct SUT specific resource
 ...	is imported based on ${SUT} variable. SeleniumLibrary is also
 ...	imported here so that no other file needs to import it.
-Library	    Selenium2Library
+Library	    ExtendedSelenium2Library
 Library  	String
 Library     connection_erp.py
 Library     Collections
@@ -33,7 +33,7 @@ sidebaraction     [Arguments]	${action}
 	Click Element   //div[@class='o_cp_left']/div[2]/div/div[2]/ul//a[normalize-space(.)='${action}']
 
 # checked: 9.0 ok
-Login    [Arguments]    ${user}=${ODOO_USER}    ${password}=${ODOO_PASSWORD}    ${db}=${ODOO_DB}
+Login    [Arguments]    ${user}=${USER}    ${password}=${PASSWORD}    ${db}=${ODOO_DB}
 	Open Browser	${ODOO URL}  browser=${BROWSER}
 	Maximize Browser Window
 	Go To                           ${ODOO URL}

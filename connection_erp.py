@@ -16,12 +16,14 @@ try:
 except:
     logger.warning("Please install sudo pip install -U erppeek")
 
+#Decorator to convert the arguments from Robot Framework into UTF-8, as far as they are often Unicode
 def to_utf8(f):
     def converter(*args, **kwargs):
         arguments = map(lambda x: x.encode('utf-8'), args)
         return f(*arguments, **kwargs)
     return converter
 
+#Depending on the date format, it returns the Day
 def return_day (date):
     date_str=str (date)
     if date_str.find('.')>=0:
@@ -33,6 +35,7 @@ def return_day (date):
         days = date_str.split('/')
         day = days[1]
     return int(day)
+
 
 @to_utf8
 def create_new_db(server, password, name, demo = False, user_password='admin', lang='de_DE'):
