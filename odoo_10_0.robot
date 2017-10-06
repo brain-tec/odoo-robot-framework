@@ -34,9 +34,9 @@ sidebaraction     [Arguments]	${action}
 # checked: 9.0 ok
 Login	[Arguments]	${user}=${USER}	${password}=${PASSWORD}	${db}=${ODOO_DB}
     Set Global Variable     ${ODOO_URL_DB}     http://${SERVER}:${ODOO_PORT}
-    Start Virtual Display   1920    1080
+    #Start Virtual Display   1920    1080
 	Open Browser	${ODOO_URL_DB}  browser=${BROWSER}
-	#Maximize Browser Window
+	Maximize Browser Window
 	Go To                           ${ODOO_URL_DB}/web/database/selector
 	Set Selenium Speed	            ${SELENIUM_DELAY}
 	Set Selenium Timeout	        ${SELENIUM_TIMEOUT}
@@ -250,7 +250,7 @@ CharWizard	[Arguments]	${model}	${field}	${value}
 
 X2Many-Char	[Arguments]	${model}	${field}	${value}
     #Click Element    //td[@data-field="${field}" and @data-bt-testing-model_name="${model}"]
-   # Modal   Click Element	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
+    Modal   Click Element	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
 #	Modal	Clear Element Text	xpath=//input[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
     Input Text	xpath=//input[ancestor::div[contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']	${value}
 	ElementPostCheck
@@ -314,6 +314,8 @@ NotebookPage	[Arguments]	${string}
 # checked: 8.0 ok
 NewOne2Many	[Arguments]	${model}	${field}
 	SelectNotebook	xpath=//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a
+	wait until element is visible       xpath=(//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a)[last()]
+	Focus           xpath=(//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a)[last()]
 	Click element	xpath=(//div[contains(@class,'o_form_field') and contains(@class, 'o_view_manager_content') and descendant::div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']]//td[contains(@class,'o_form_field_x2many_list_row_add')]/a)[last()]
 	ElementPostCheck
 
@@ -321,15 +323,15 @@ One2ManySelectRecord	[Arguments]	${model}	${field}	${submodel}	@{fields}
 	SelectNotebook	xpath=//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']
 
 	# Initialize variable
-	${pre_check_xpath}=	Set Variable
+	${pre_check_xpath}=	    Set Variable
 	${post_check_xpath}=	Set Variable
-	${pre_click_xpath}=	Set Variable
+	${pre_click_xpath}=	    Set Variable
 	${post_click_xpath}=	Set Variable
-	${pre_check_xpath}=	Catenate	(//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[descendant::td[
+	${pre_check_xpath}=	    Catenate	(//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[descendant::td[
 	${post_check_xpath}=	Catenate	]])[1]
-	${pre_click_xpath}=	Catenate	(//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[
+	${pre_click_xpath}=	    Catenate	(//div[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']//table[contains(@class,'oe_list_content')]//tr[
 	${post_click_xpath}=	Catenate	]/td)[1]
-	${xpath}=	Set Variable
+	${xpath}=	            Set Variable
 
 	# Got throught all field=value and to select the correct record
 	: FOR	${field}	IN  @{fields}
