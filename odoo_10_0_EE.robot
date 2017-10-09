@@ -263,7 +263,7 @@ Select-Option	[Arguments]	${model}	${field}	${value}
 	Select From List By Value   	xpath=//select[@data-bt-testing-model_name='${model}' and @data-bt-testing-name='${field}']    ${value}
 	ElementPostCheck
 
-X2Many-Selection [Arguments] ${model} ${field} ${value}
+X2Many-Selection	[Arguments]	${model}	${field}	${value}
     Modal   Click Element   xpath=//select[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']
     Modal   Select From List By Value   xpath=//select[ancestor::div[contains(@class, 'o_view_manager_content') and contains(@class, 'o_form_field') and descendant::div[@data-bt-testing-submodel_name='${model}']] and @data-bt-testing-name='${field}']  value=${value}
     ElementPostCheck
