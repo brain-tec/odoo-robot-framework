@@ -394,9 +394,9 @@ SidebarActionOld  [Arguments]	${type}	${id}
 
 old_SidebarAction  [Arguments]	${type}	${index}
 	# open the menu
-	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[@class='o_dropdown' and @data-bt-type='${type}']
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[not(contains(@style,'display: none'))]/button
 	# click on the menuentry
-	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[contains(@class,'o_dropdown') and @data-bt-type='${type}']/ul/li/a[@data-section='${type}' and @data-index='${index}']
+	Click Element	xpath=//div[contains(@class,'o_cp_sidebar')]/div/div[not(contains(@style,'display: none'))]/ul/li/a[@data-section='${type}' and @data-index='${index}']
 
 
 MainWindowButton	[Arguments]	${button_text}
